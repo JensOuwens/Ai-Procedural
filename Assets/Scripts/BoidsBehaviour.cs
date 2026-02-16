@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,8 @@ public class BoidsBehaviour : MonoBehaviour
     [Header("Bounds Settings")]
     [SerializeField] private Vector3 MinBounds;
     [SerializeField] private Vector3 MaxBounds;
+
+    private Vector3 percievedCenter;
 
     
 
@@ -44,7 +47,7 @@ public class BoidsBehaviour : MonoBehaviour
     private void MoveAllBoidsToNewPosition()
     {
         Vector3 v1, v2, v3;
-
+        
         foreach (Boid boid in listOfBoids)
         {
             v1 = CohesionRule(boid);
@@ -58,7 +61,19 @@ public class BoidsBehaviour : MonoBehaviour
     
     private Vector3 CohesionRule(Boid boid)
     {
-        return new Vector3();
+        Vector3 percievedCenter = Vector3.zero;
+
+        foreach (Boid centerBoid in  listOfBoids )
+        {
+            if (centerBoid != boid)
+            {
+                percievedCenter += centerBoid.transform.position;
+            }
+        }
+        
+        percievedCenter = percievedCenter / (listOfBoids.Count - 1);
+            
+        return (percievedCenter - boid.gameObject.transform.position) / 100;
     }
     
     private Vector3 SeperationRule(Boid boid)
