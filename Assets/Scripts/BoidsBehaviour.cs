@@ -8,13 +8,14 @@ using UnityEngine;
 public class BoidsBehaviour : MonoBehaviour
 {
     [Header("Boids settings")]
-    [SerializeField] private int AmountOfBoids;
-    [SerializeField] private GameObject BoidPrefab;
+    [SerializeField] private int amountOfBoids;
+    [SerializeField] private GameObject boidPrefab;
+    [SerializeField] private float seperationDistance;
     private List<Boid> listOfBoids;
     
     [Header("Bounds Settings")]
-    [SerializeField] private Vector3 MinBounds;
-    [SerializeField] private Vector3 MaxBounds;
+    [SerializeField] private Vector3 minBounds;
+    [SerializeField] private Vector3 maxBounds;
 
     private Vector3 percievedCenter;
 
@@ -33,11 +34,11 @@ public class BoidsBehaviour : MonoBehaviour
     //randomizes void spawn location, the instantiates the gameobject into a list
     private void InitialisePositions()
     {
-        for (int i = 0; i < AmountOfBoids; i++)
+        for (int i = 0; i < amountOfBoids; i++)
         {
-            Vector3 RandomPos = new Vector3(Random.Range(MinBounds.x, MaxBounds.x),Random.Range(MinBounds.y, MaxBounds.y),Random.Range(MinBounds.z, MaxBounds.z));
+            Vector3 randomPos = new Vector3(Random.Range(minBounds.x, maxBounds.x),Random.Range(minBounds.y, maxBounds.y),Random.Range(minBounds.z, maxBounds.z));
             
-            Boid boid = Instantiate(BoidPrefab, RandomPos, Quaternion.identity) .GetComponent<Boid>();
+            Boid boid = Instantiate(boidPrefab, randomPos, Quaternion.identity) .GetComponent<Boid>();
             
             listOfBoids.Add(boid);
         }
@@ -55,7 +56,7 @@ public class BoidsBehaviour : MonoBehaviour
             v3 = AlingementRule(boid);
             
             boid.boidVelocity += v1 + v2 + v3;
-            boid.gameObject.transform.position += boid.boidVelocity;
+            boid.gameObject.transform.position += boid.boidVelocity.normalized;
         }
     }
     
@@ -63,11 +64,11 @@ public class BoidsBehaviour : MonoBehaviour
     {
         Vector3 percievedCenter = Vector3.zero;
 
-        foreach (Boid centerBoid in  listOfBoids )
+        foreach (Boid focusBoid in  listOfBoids )
         {
-            if (centerBoid != boid)
+            if (focusBoid != boid)
             {
-                percievedCenter += centerBoid.transform.position;
+                percievedCenter += focusBoid.transform.position;
             }
         }
         
@@ -78,7 +79,20 @@ public class BoidsBehaviour : MonoBehaviour
     
     private Vector3 SeperationRule(Boid boid)
     {
-        return new Vector3();
+        Vector3 c = Vector3.zero;
+
+        foreach (Boid focusBoid in listOfBoids)
+        {
+            if (focusBoid != boid)
+            {
+                if (Vector3.Distance(focusBoid.transform.position, boid.gameObject.transform.position) <= seperationDistance) 
+                {
+                    c -= (focusBoid.transform.position - boid.gameObject.transform.position);
+                }
+            }
+        }
+        
+        return c;
     }
     
     private Vector3 AlingementRule(Boid boid)

@@ -148,11 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8161daefdd1c5ff48ba098491dc8df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoidsBehaviour
-  AmountOfBoids: 20
-  BoidPrefab: {fileID: 7709585142043863501, guid: 380fca4ee8a95f4499b565a9047acc98, type: 3}
-  listOfBoids: []
-  MinBounds: {x: 10, y: 10, z: 10}
-  MaxBounds: {x: -10, y: -10, z: -10}
+  amountOfBoids: 20
+  boidPrefab: {fileID: 7709585142043863501, guid: 380fca4ee8a95f4499b565a9047acc98, type: 3}
+  seperationDistance: 1
+  minBounds: {x: 10, y: 10, z: 10}
+  maxBounds: {x: -10, y: -10, z: -10}
 --- !u!4 &5784775
 Transform:
   m_ObjectHideFlags: 0
