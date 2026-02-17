@@ -57,8 +57,8 @@ public class BoidsBehaviour : MonoBehaviour
             v2 = SeperationRule(boid);
             v3 = AlingementRule(boid);
             v4 = StayInBounds(boid);
-            
-            boid.boidVelocity += v1 + v2 + v3 + v4;
+
+            boid.boidVelocity += v1 + v2 + v3+ v4;
             LimitVelocity(boid);
             boid.gameObject.transform.position += boid.boidVelocity.normalized;
         }
@@ -78,7 +78,9 @@ public class BoidsBehaviour : MonoBehaviour
         
         percievedCenter = percievedCenter / (listOfBoids.Count - 1);
             
-        return (percievedCenter - boid.gameObject.transform.position) / 100;
+        percievedCenter -= boid.gameObject.transform.position / 100;
+        
+        return percievedCenter.normalized;
     }
     
     private Vector3 SeperationRule(Boid boid)
@@ -96,7 +98,7 @@ public class BoidsBehaviour : MonoBehaviour
             }
         }
         
-        return c;
+        return c.normalized;
     }
     
     private Vector3 AlingementRule(Boid boid)
@@ -113,7 +115,7 @@ public class BoidsBehaviour : MonoBehaviour
         
         percievedAngle = percievedAngle / (listOfBoids.Count - 1);
         
-        return (percievedAngle - boid.gameObject.transform.eulerAngles);
+        return (percievedAngle - boid.gameObject.transform.eulerAngles).normalized;
     }
 
     private void LimitVelocity(Boid boid)
@@ -121,6 +123,7 @@ public class BoidsBehaviour : MonoBehaviour
 
         if (boid.boidVelocity.magnitude > velocityLimit)
         {
+
             boid.boidVelocity = (boid.boidVelocity / boid.boidVelocity.magnitude) * velocityLimit;
         }
     }
@@ -128,7 +131,7 @@ public class BoidsBehaviour : MonoBehaviour
     private Vector3 StayInBounds(Boid boid)
     {
         Vector3 boundsVector = Vector3.zero;
-
+    
         if (boid.transform.position.x < minBounds.x)
             boundsVector.x = boundsLimitMagnitude;
         else if (boid.transform.position.x > maxBounds.x)
