@@ -97,7 +97,19 @@ public class BoidsBehaviour : MonoBehaviour
     
     private Vector3 AlingementRule(Boid boid)
     {
-        return new Vector3();
+        Vector3 percievedAngle = Vector3.zero;
+
+        foreach (Boid focusBoid in listOfBoids)
+        {
+            if (focusBoid != boid)
+            {
+                percievedAngle +=  focusBoid.transform.eulerAngles;
+            }
+        }
+        
+        percievedAngle = percievedAngle / (listOfBoids.Count - 1);
+        
+        return (percievedAngle - boid.gameObject.transform.eulerAngles);
     }
     
 }
