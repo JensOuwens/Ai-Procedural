@@ -150,9 +150,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoidsBehaviour
   amountOfBoids: 20
   boidPrefab: {fileID: 7709585142043863501, guid: 380fca4ee8a95f4499b565a9047acc98, type: 3}
-  seperationDistance: 1
+  seperationDistance: 2
+  velocityLimit: 0.01
   minBounds: {x: 10, y: 10, z: 10}
   maxBounds: {x: -10, y: -10, z: -10}
+  boundsLimitMagnitude: 1
 --- !u!4 &5784775
 Transform:
   m_ObjectHideFlags: 0
