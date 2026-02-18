@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-/// <summary>
-/// TODO: change boids bounds to reflect the camera
-/// </summary>
 public class BoidsBehaviour : MonoBehaviour
 {
     [Header("Boids settings")]
