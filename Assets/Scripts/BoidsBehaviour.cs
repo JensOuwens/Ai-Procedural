@@ -21,36 +21,32 @@ public class BoidsBehaviour : MonoBehaviour
 
     private Vector3 percievedCenter;
 
+    
+
     private void Start()
     {
         listOfBoids = new List<Boid>();
         InitialisePositions();
     }
-
     private void Update()
     {
         MoveAllBoidsToNewPosition();
     }
     
-    // randomizes void spawn location, then instantiates the gameobject into a list
+    //randomizes void spawn location, the instantiates the gameobject into a list
     private void InitialisePositions()
     {
         for (int i = 0; i < amountOfBoids; i++)
         {
-            Vector3 randomPos = new Vector3(
-                Random.Range(minBounds.x, maxBounds.x),
-                Random.Range(minBounds.y, maxBounds.y),
-                Random.Range(minBounds.z, maxBounds.z)
-            );
+            Vector3 randomPos = new Vector3(Random.Range(minBounds.x, maxBounds.x),Random.Range(minBounds.y, maxBounds.y),Random.Range(minBounds.z, maxBounds.z));
             
-            Boid boid = Instantiate(boidPrefab, randomPos, Quaternion.identity)
-                .GetComponent<Boid>();
+            Boid boid = Instantiate(boidPrefab, randomPos, Quaternion.identity) .GetComponent<Boid>();
             
             listOfBoids.Add(boid);
         }
     }
     
-    // rule application
+    //rule application
     private void MoveAllBoidsToNewPosition()
     {
         Vector3 v1, v2, v3, v4;
@@ -62,7 +58,7 @@ public class BoidsBehaviour : MonoBehaviour
             v3 = AlingementRule(boid);
             v4 = StayInBounds(boid);
 
-            boid.boidVelocity += v1 + v2 + v3 + v4;
+            boid.boidVelocity += v1 + v2 + v3+ v4;
             LimitVelocity(boid);
             boid.gameObject.transform.position += boid.boidVelocity.normalized;
         }
@@ -72,7 +68,7 @@ public class BoidsBehaviour : MonoBehaviour
     {
         Vector3 percievedCenter = Vector3.zero;
 
-        foreach (Boid focusBoid in listOfBoids)
+        foreach (Boid focusBoid in  listOfBoids )
         {
             if (focusBoid != boid)
             {
@@ -81,6 +77,7 @@ public class BoidsBehaviour : MonoBehaviour
         }
         
         percievedCenter = percievedCenter / (listOfBoids.Count - 1);
+            
         percievedCenter -= boid.gameObject.transform.position / 100;
         
         return percievedCenter.normalized;
@@ -94,9 +91,7 @@ public class BoidsBehaviour : MonoBehaviour
         {
             if (focusBoid != boid)
             {
-                if (Vector3.Distance(
-                        focusBoid.transform.position,
-                        boid.gameObject.transform.position) <= seperationDistance)
+                if (Vector3.Distance(focusBoid.transform.position, boid.gameObject.transform.position) <= seperationDistance) 
                 {
                     c -= (focusBoid.transform.position - boid.gameObject.transform.position);
                 }
@@ -114,7 +109,7 @@ public class BoidsBehaviour : MonoBehaviour
         {
             if (focusBoid != boid)
             {
-                percievedAngle += focusBoid.transform.eulerAngles;
+                percievedAngle +=  focusBoid.transform.eulerAngles;
             }
         }
         
@@ -125,10 +120,11 @@ public class BoidsBehaviour : MonoBehaviour
 
     private void LimitVelocity(Boid boid)
     {
+
         if (boid.boidVelocity.magnitude > velocityLimit)
         {
-            boid.boidVelocity =
-                (boid.boidVelocity / boid.boidVelocity.magnitude) * velocityLimit;
+
+            boid.boidVelocity = (boid.boidVelocity / boid.boidVelocity.magnitude) * velocityLimit;
         }
     }
 
@@ -139,18 +135,19 @@ public class BoidsBehaviour : MonoBehaviour
         if (boid.transform.position.x < minBounds.x)
             boundsVector.x = boundsLimitMagnitude;
         else if (boid.transform.position.x > maxBounds.x)
-            boundsVector.x = -boundsLimitMagnitude;
+            boundsVector.x = - boundsLimitMagnitude;
         
         if (boid.transform.position.y < minBounds.y)
             boundsVector.y = boundsLimitMagnitude;
         else if (boid.transform.position.y > maxBounds.y)
-            boundsVector.y = -boundsLimitMagnitude;
+            boundsVector.y = - boundsLimitMagnitude;
         
         if (boid.transform.position.z < minBounds.z)
             boundsVector.z = boundsLimitMagnitude;
         else if (boid.transform.position.z > maxBounds.z)
-            boundsVector.z = -boundsLimitMagnitude;
+            boundsVector.z = - boundsLimitMagnitude;
             
         return boundsVector;
     }
+    
 }
