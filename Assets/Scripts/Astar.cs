@@ -15,6 +15,10 @@ public class Astar
     /// <returns></returns>
     public List<Vector2Int> FindPathToTarget(Vector2Int startPos, Vector2Int endPos, Cell[,] grid)
     {
+        Cell startCell = grid[startPos.x, startPos.y];
+        List<Cell> neighbors = startCell.GetNeighbours(grid);
+        
+        
         return null;
     }
 
