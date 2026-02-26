@@ -51,12 +51,13 @@ public class Astar
     //check all 4 directions for walls
     private bool WallCheck(Cell currentCell, Cell neighbour)
     {
-        Vector2Int direction = (currentCell.gridPosition - neighbour.gridPosition);
+        Vector2Int direction = (neighbour.gridPosition - currentCell.gridPosition);
 
         if (direction == Vector2Int.up)
         {
             if (currentCell.HasWall(Wall.UP))
             {
+                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -64,6 +65,7 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.DOWN))
             {
+                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -71,6 +73,7 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.LEFT))
             {
+                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -78,6 +81,7 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.RIGHT))
             {
+                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
