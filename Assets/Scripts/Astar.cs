@@ -19,26 +19,29 @@ public class Astar
         Cell endCell = grid[endPos.x, endPos.y];
         List<Cell> closedList = new List<Cell>();
         List<Cell> openList = new List<Cell>();
-        closedList.Add(startCell);
+        closedList.Add(endCell);
         
-        //get neighbours
         //while ()
         {
-            List<Cell> neighbors = new  List<Cell>();
-            
-            foreach (Cell cell in closedList)
+            //get neighbours
+            int closedIndex = closedList.Count - 1;
+            List<Cell> neighbours = closedList[closedIndex].GetNeighbours(grid);
+
+            foreach (Cell neighbour in neighbours)
             {
-                if (WallCheck(cell)) continue;
-                
-                neighbors = cell.GetNeighbours(grid);
-                
+                if (WallCheck(closedList[closedIndex], neighbour)) openList.Add(neighbour);
+            }
+
+            foreach (Cell cell in openList)
+            {
+                Debug.Log(cell.gridPosition);
             }
             
 
         }
         
         //Debug.Log(startCell.gridPosition);
-        //Debug.Log(endCell.gridPosition);
+        //Debug.Log("endcell " + endCell.gridPosition);
         
         
         
@@ -46,18 +49,42 @@ public class Astar
     }
     
     //check all 4 directions for walls
-    private bool WallCheck(Cell currentCell)
+    private bool WallCheck(Cell currentCell, Cell neighbour)
     {
-        Debug.Log(currentCell.HasWall(Wall.RIGHT));
-        if (!currentCell.HasWall(Wall.UP) && !currentCell.HasWall(Wall.DOWN) && !currentCell.HasWall(Wall.LEFT) &&  !currentCell.HasWall(Wall.RIGHT))
+        Vector2Int direction = (currentCell.gridPosition - neighbour.gridPosition);
+
+        if (direction == Vector2Int.up)
         {
-            return true;
+            if (currentCell.HasWall(Wall.UP))
+            {
+                return false;
+            }
         }
-        return false;
-        //Debug.Log("this cell has no walls at coords" + currentCell.gridPosition);
+        else if (direction == Vector2Int.down)
+        {
+            if (currentCell.HasWall(Wall.DOWN))
+            {
+                return false;
+            }
+        }
+        else if (direction == Vector2Int.left)
+        {
+            if (currentCell.HasWall(Wall.LEFT))
+            {
+                return false;
+            }
+        }
+        else if (direction == Vector2Int.right)
+        {
+            if (currentCell.HasWall(Wall.RIGHT))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
-    //calculate fscor for neighbours
+    //calculate fscore for neighbours
     //calculate hscore for neighbours
     private void CalculateCellScores(Cell currentCell)
     {
