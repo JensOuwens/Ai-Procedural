@@ -16,11 +16,39 @@ public class Astar
     public List<Vector2Int> FindPathToTarget(Vector2Int startPos, Vector2Int endPos, Cell[,] grid)
     {
         Cell startCell = grid[startPos.x, startPos.y];
-        List<Cell> neighbors = startCell.GetNeighbours(grid);
+        Cell endCell = grid[endPos.x, endPos.y];
+        //get neighbours
+        //while (expression)
+        //{
+            List<Cell> neighbors = startCell.GetNeighbours(grid);
+        //}
+        
+        //Debug.Log(startCell.gridPosition);
+        //Debug.Log(endCell.gridPosition);
+
+        foreach (Cell neighbor in neighbors)
+        {
+            Debug.Log(neighbor.gridPosition);
+        }
         
         
         return null;
     }
+
+    //calculate fscor for neighbours
+    //calculate hscore for neighbours
+    private void calculateCellScores(Cell currentCell)
+    {
+        
+    }
+    
+    //get neighbours
+    //calculate fscor for neighbours
+    //calculate hscore for neighbours
+    //decide the best option
+    //save best option in the list
+    //repeat
+    
 
     /// <summary>
     /// This is the Node class you can use this class to store calculated FScores for the cells of the grid, you can leave this as it is
