@@ -17,27 +17,49 @@ public class Astar
     {
         Cell startCell = grid[startPos.x, startPos.y];
         Cell endCell = grid[endPos.x, endPos.y];
+        List<Cell> closedList = new List<Cell>();
+        List<Cell> openList = new List<Cell>();
+        closedList.Add(startCell);
+        
         //get neighbours
-        //while (expression)
-        //{
-            List<Cell> neighbors = startCell.GetNeighbours(grid);
-        //}
+        //while ()
+        {
+            List<Cell> neighbors = new  List<Cell>();
+            
+            foreach (Cell cell in closedList)
+            {
+                if (WallCheck(cell)) continue;
+                
+                neighbors = cell.GetNeighbours(grid);
+                
+            }
+            
+
+        }
         
         //Debug.Log(startCell.gridPosition);
         //Debug.Log(endCell.gridPosition);
-
-        foreach (Cell neighbor in neighbors)
-        {
-            Debug.Log(neighbor.gridPosition);
-        }
+        
         
         
         return null;
     }
+    
+    //check all 4 directions for walls
+    private bool WallCheck(Cell currentCell)
+    {
+        Debug.Log(currentCell.HasWall(Wall.RIGHT));
+        if (!currentCell.HasWall(Wall.UP) && !currentCell.HasWall(Wall.DOWN) && !currentCell.HasWall(Wall.LEFT) &&  !currentCell.HasWall(Wall.RIGHT))
+        {
+            return true;
+        }
+        return false;
+        //Debug.Log("this cell has no walls at coords" + currentCell.gridPosition);
+    }
 
     //calculate fscor for neighbours
     //calculate hscore for neighbours
-    private void calculateCellScores(Cell currentCell)
+    private void CalculateCellScores(Cell currentCell)
     {
         
     }
