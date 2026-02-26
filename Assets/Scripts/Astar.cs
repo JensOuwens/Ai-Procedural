@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class Astar
 {
@@ -19,22 +18,22 @@ public class Astar
         Cell endCell = grid[endPos.x, endPos.y];
         List<Cell> closedList = new List<Cell>();
         List<Cell> openList = new List<Cell>();
-        closedList.Add(endCell);
+        openList.Add(startCell);
         
         //while ()
         {
             //get neighbours
             int closedIndex = closedList.Count - 1;
-            List<Cell> neighbours = closedList[closedIndex].GetNeighbours(grid);
+            List<Cell> neighbours = openList[closedIndex].GetNeighbours(grid);
 
             foreach (Cell neighbour in neighbours)
             {
-                if (WallCheck(closedList[closedIndex], neighbour)) openList.Add(neighbour);
+                if (WallCheck(startCell, neighbour)) openList.Add(neighbour);
             }
 
             foreach (Cell cell in openList)
             {
-                Debug.Log(cell.gridPosition);
+                CalculateCellScores(startCell, cell, endCell);
             }
             
 
@@ -57,7 +56,6 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.UP))
             {
-                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -65,7 +63,6 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.DOWN))
             {
-                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -73,7 +70,6 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.LEFT))
             {
-                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -81,7 +77,6 @@ public class Astar
         {
             if (currentCell.HasWall(Wall.RIGHT))
             {
-                Debug.Log("removed at" + neighbour.gridPosition);
                 return false;
             }
         }
@@ -90,7 +85,7 @@ public class Astar
 
     //calculate fscore for neighbours
     //calculate hscore for neighbours
-    private void CalculateCellScores(Cell currentCell)
+    private void CalculateCellScores(Cell startCell, Cell currentCell, Cell targetCell)
     {
         
     }
