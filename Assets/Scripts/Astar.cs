@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class Astar
 {
     /// <summary>
     /// TODO: Implement this function so that it returns a list of Vector2Int positions which describes a path from the startPos to the endPos
+    /// TODO: rework neighbour lookup logic
     /// Note that you will probably need to add some helper functions
     /// </summary>
     /// <param name="startPos"></param>
@@ -15,29 +17,58 @@ public class Astar
     public List<Vector2Int> FindPathToTarget(Vector2Int startPos, Vector2Int endPos, Cell[,] grid)
     {
         Cell startCell = grid[startPos.x, startPos.y];
+        Node startNode = new Node(startPos, null, 0, 0);
         Cell endCell = grid[endPos.x, endPos.y];
-        List<Cell> closedList = new List<Cell>();
-        List<Cell> openList = new List<Cell>();
-        openList.Add(startCell);
-        
-        //while ()
+        Cell currentCell;
+        Node currentNode;
+        List<Node> openList = new List<Node>();
+        List<Node> closedList = new List<Node>();
+
+        if (startCell.gridPosition == endCell.gridPosition)
         {
+            Debug.Log("allready at target location");
+            return null;
+        }
+        
+        openList.Add(startNode);
+        currentCell = startCell;
+        currentNode = startNode;
+        
+        while (currentNode.position != endCell.gridPosition)
+        {
+            
             //get neighbours
-            int closedIndex = closedList.Count - 1;
-            List<Cell> neighbours = openList[closedIndex].GetNeighbours(grid);
+            List<Cell> neighbours = currentCell.GetNeighbours(grid);
 
             foreach (Cell neighbour in neighbours)
             {
-                if (WallCheck(startCell, neighbour)) openList.Add(neighbour);
+                if (!WallCheck(startCell, neighbour)) continue;
+                
+                int gsCcore = CalculateGScore(currentNode, neighbour.gridPosition);
+                int hScore = CalculateHScore(endPos, neighbour.gridPosition);
+
+                Node neighbourNode = new Node(neighbour.gridPosition, currentNode, gsCcore, hScore);
+
+                if (closedList.Contains(neighbourNode)) continue;
+                
+                foreach (Node compareNode in openList)
+                {
+                    if (compareNode != neighbourNode) continue;
+                    if (compareNode.FScore > neighbourNode.FScore) continue;
+                }
+                
+                openList.Add(neighbourNode);
             }
 
-            foreach (Cell cell in openList)
-            {
-                CalculateCellScores(startCell, cell, endCell);
-            }
+            float currentFScore;
             
-
+            foreach (Node neighbourNode in openList)
+            {
+                
+            }
         }
+        
+        CalculateRoute();
         
         //Debug.Log(startCell.gridPosition);
         //Debug.Log("endcell " + endCell.gridPosition);
@@ -83,10 +114,20 @@ public class Astar
         return true;
     }
 
-    //calculate fscore for neighbours
+    //calculate gscore for neighbours
     //calculate hscore for neighbours
-    private void CalculateCellScores(Cell startCell, Cell currentCell, Cell targetCell)
+    private int CalculateGScore(Node currentNode, Vector2Int currentPosition)
     {
+        float gscore = currentNode.GScore + (currentPosition - currentNode.position).magnitude;
+        return (int)gscore;
+    }
+    
+    private int CalculateHScore(Vector2Int targetPosition, Vector2Int neighbourPosition)
+    {
+        return Math.Abs(neighbourPosition.x - targetPosition.x) + Math.Abs(neighbourPosition.y - targetPosition.y);
+    }
+    
+    private void CalculateRoute(){
         
     }
     
