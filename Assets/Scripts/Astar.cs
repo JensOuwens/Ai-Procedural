@@ -7,7 +7,6 @@ public class Astar
 {
     /// <summary>
     /// TODO: Implement this function so that it returns a list of Vector2Int positions which describes a path from the startPos to the endPos
-    /// TODO: rework neighbour lookup logic
     /// Note that you will probably need to add some helper functions
     /// </summary>
     /// <param name="startPos"></param>
@@ -63,7 +62,7 @@ public class Astar
             
             if (currentNode.position == endPos)
             {
-                CalculateRoute();
+                return CalculateRoute(currentNode);
                 return null;
             }
             
@@ -147,8 +146,6 @@ public class Astar
         return true;
     }
 
-    //calculate gscore for neighbours
-    //calculate hscore for neighbours
     private int CalculateGScore(Node currentNode, Vector2Int currentPosition)
     {
         float gscore = currentNode.GScore + (currentPosition - currentNode.position).magnitude;
@@ -160,18 +157,20 @@ public class Astar
         return Math.Abs(neighbourPosition.x - targetPosition.x) + Math.Abs(neighbourPosition.y - targetPosition.y);
     }
     
-    private void CalculateRoute(){
+    private List<Vector2Int> CalculateRoute(Node endNode){
+        List<Vector2Int> path = new List<Vector2Int>();
+        Node current = endNode;
         
+        while (current != null)
+        {
+            path.Add(current.position);
+            current = current.parent;
+        }
+        
+        path.Reverse();
+        return path;
     }
     
-    //get neighbours
-    //calculate fscor for neighbours
-    //calculate hscore for neighbours
-    //decide the best option
-    //save best option in the list
-    //repeat
-    
-
     /// <summary>
     /// This is the Node class you can use this class to store calculated FScores for the cells of the grid, you can leave this as it is
     /// </summary>
