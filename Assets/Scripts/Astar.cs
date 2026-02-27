@@ -34,47 +34,80 @@ public class Astar
         currentCell = startCell;
         currentNode = startNode;
         
-        while (currentNode.position != endCell.gridPosition)
+        while (openList.Count > 0)
         {
+            bool isFirstNeighbour = true;
+            float currentFScore;
+            Node currentLowestNode = null;
+            
+            foreach (Node neighbourNode in openList)
+            {
+                if (isFirstNeighbour)
+                {
+                    currentFScore = neighbourNode.FScore;
+                    currentLowestNode = neighbourNode;
+                    isFirstNeighbour = false;
+                }
+                
+                if (neighbourNode.FScore < currentLowestNode.FScore)
+                {
+                    currentFScore = neighbourNode.FScore;
+                    currentLowestNode =  neighbourNode;
+                }
+            }
+            
+            openList.Remove(currentLowestNode);
+            closedList.Add(currentLowestNode);
+            currentNode = currentLowestNode;
+            currentCell = grid[currentLowestNode.position.x, currentLowestNode.position.y];
+            
+            if (currentNode.position == endPos)
+            {
+                CalculateRoute();
+                return null;
+            }
             
             //get neighbours
             List<Cell> neighbours = currentCell.GetNeighbours(grid);
 
             foreach (Cell neighbour in neighbours)
             {
-                if (!WallCheck(startCell, neighbour)) continue;
+                if (!WallCheck(currentCell, neighbour)) continue;
                 
                 int gsCcore = CalculateGScore(currentNode, neighbour.gridPosition);
                 int hScore = CalculateHScore(endPos, neighbour.gridPosition);
 
                 Node neighbourNode = new Node(neighbour.gridPosition, currentNode, gsCcore, hScore);
 
-                if (closedList.Contains(neighbourNode)) continue;
+                bool isDuplicate = false;
+                
+                foreach (Node ClosedNode in closedList)
+                {
+                    if (ClosedNode.position == neighbourNode.position) isDuplicate = true; continue;
+                }
                 
                 foreach (Node compareNode in openList)
                 {
-                    if (compareNode != neighbourNode) continue;
-                    if (compareNode.FScore > neighbourNode.FScore) continue;
+                    if (compareNode.position == neighbourNode.position)
+                    {
+                        if (neighbourNode.GScore < compareNode.GScore)
+                        {
+                            compareNode.GScore = gsCcore;
+                            compareNode.parent = currentNode;
+                            isDuplicate = true;
+                        }
+                        else
+                        {
+                            isDuplicate = true;
+                        }
+
+                        break;
+                    }
                 }
                 
-                openList.Add(neighbourNode);
-            }
-
-            float currentFScore;
-            
-            foreach (Node neighbourNode in openList)
-            {
-                
+                if (!isDuplicate) openList.Add(neighbourNode);
             }
         }
-        
-        CalculateRoute();
-        
-        //Debug.Log(startCell.gridPosition);
-        //Debug.Log("endcell " + endCell.gridPosition);
-        
-        
-        
         return null;
     }
     
