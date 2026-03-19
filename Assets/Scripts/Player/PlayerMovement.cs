@@ -11,26 +11,30 @@ public class PlayerMovement : MonoBehaviour, IDamageable
     public bool isDead { get; set; }
 
     [Header("Movement")] 
-    [SerializeField]
-    private float moveSpeed;
+    [SerializeField] private float moveSpeed;
     private Vector2 input;
+
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void OnValidate()
     {
         maxHealth = setMaxHealth;
         currentHealth = setMaxHealth;
-        
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-            gameObject.transform.position += new Vector3(input.x * moveSpeed, 0 , input.y * moveSpeed);
+        Vector3 movement = new Vector3(input.x, 0, input.y) * moveSpeed;
+        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime);
     }
 
     public void Move(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>();
     }
-    
-    
 }
