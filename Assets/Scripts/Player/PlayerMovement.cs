@@ -37,4 +37,14 @@ public class PlayerMovement : MonoBehaviour, IDamageable
     {
         input = context.ReadValue<Vector2>();
     }
+    
+    public void DealDamage(int damageAmount)
+    {
+        currentHealth -= damageAmount;
+        if (currentHealth <= 0)
+        {
+            isDead = true;
+            currentHealth = 0;
+        }
+    }
 }

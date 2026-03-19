@@ -6,9 +6,9 @@ public interface INode
 {
     public NodeStatus currentStatus { get; set; }
 
-    public string name {get; set;}
-    
-    public List<INode> children {get; set;}
+    public void AddChild(Node child);
 
-    protected int currentChild {get; set;}
+    public NodeStatus Process();
+
+    public void Reset();
 }
