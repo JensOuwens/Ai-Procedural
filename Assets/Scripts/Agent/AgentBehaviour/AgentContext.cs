@@ -9,7 +9,6 @@ public class AgentContext : MonoBehaviour
 
     public void CallAgentAttackBehaviour(Node callBackNode)
     {
-        
         //Update status, for loop, check for status in agentattackbehavour, then call it in the node
     }
 
@@ -28,8 +27,27 @@ public class AgentContext : MonoBehaviour
         //Update status, for loop, check for status in CallAgentPatrolBehaviour, then call it in the node
     }
 
-    public void StopAllActions()
+    public void StopAgentAttackBehaviour()
     {
         
     }
+    
+    public void StopAgentMovementBehaviour()
+    {
+        
+    }   
+    
+    public void StopAgentPickUpBehaviour()
+    {
+        
+    }  
+    
+    public void StopAgentPatrolBehaviour()
+    {
+        
+    }
+    
+    
+    
+    
 }
