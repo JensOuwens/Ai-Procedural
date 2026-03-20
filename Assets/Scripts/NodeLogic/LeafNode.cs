@@ -5,15 +5,13 @@ public class LeafNode : Node
 {
     public override AgentContext agentContext { get; set; }
     private int agentContextID;
-    private Blackboard blackboard;
     
     public override NodeStatus currentStatus { get; set; }
     
-    public LeafNode(AgentContext agentContext, int agentContextID, Blackboard blackboard)
+    public LeafNode(AgentContext agentContext, int agentContextID)
     {
         this.agentContext = agentContext;
         this.agentContextID = agentContextID;
-        this.blackboard = blackboard;
     }
     
     public override void Execute()
@@ -29,12 +27,15 @@ public class LeafNode : Node
             case 2:
                 agentContext.CallAgentPickUpBehaviour(this);
                 break;
+            case 3:
+                agentContext.CallAgentPatrolBehaviour(this);
+                break;
         }
     }
 
     public override void Reset()
     {
-        
+        agentContext.StopAllActions();
     }
 
     public void UpdateStatus(NodeStatus NewStatus)

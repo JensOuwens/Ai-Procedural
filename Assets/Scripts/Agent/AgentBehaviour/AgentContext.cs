@@ -5,6 +5,7 @@ public class AgentContext : MonoBehaviour
     [SerializeField] private AgentAttackManager agentAttackManager;
     [SerializeField] private AgentMovementManager agentMovementManager;
     [SerializeField] private AgentPickUpManager agentPickUpManager;
+    [SerializeField] private AgentPatrolBehaviour patrolBehaviour;
 
     public void CallAgentAttackBehaviour(Node callBackNode)
     {
@@ -20,5 +21,15 @@ public class AgentContext : MonoBehaviour
     public void CallAgentPickUpBehaviour(Node callBackNode)
     {
         //Update status, for loop, check for status in CallAgentPickUpBehaviour, then call it in the node
+    }
+
+    public void CallAgentPatrolBehaviour(Node callBackNode)
+    {
+        //Update status, for loop, check for status in CallAgentPatrolBehaviour, then call it in the node
+    }
+
+    public void StopAllActions()
+    {
+        
     }
 }
