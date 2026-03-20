@@ -1,31 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node : INode
+public abstract class Node
 {
-    public NodeStatus currentStatus {get; set;}
+    public abstract AgentContext agentContext { get; set; }
+    public abstract NodeStatus currentStatus {get; set;}
 
-    public readonly string name;
+    public abstract void Execute();
     
-    public readonly List<Node> children = new();
-    
-    protected int currentChild;
-
-    public Node(string name = "Node")
-    {
-        this.name = name;
-    }
-    
-    public void AddChild(Node child) => children.Add(child);
-    
-    public virtual NodeStatus Process() => children[currentChild].Process();
-
-    public void Reset()
-    {
-        currentChild = 0;
-        foreach (var child in children)
-        {
-            child.Reset();
-        }
-    }
+    public abstract void Reset();
 }
