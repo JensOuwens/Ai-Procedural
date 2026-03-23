@@ -18,33 +18,21 @@ public class VisionSensor
         Vector3 originPos = origin.position;
         Vector3 forward = origin.forward;
 
+        // Flat direction for horizontal vision
         Vector3 toTarget = target.position - originPos;
-        float dist = toTarget.magnitude;
+        Vector3 forwardFlat = new Vector3(forward.x, 0, forward.z).normalized;
+        Vector3 toTargetFlat = new Vector3(toTarget.x, 0, toTarget.z).normalized;
 
-        // Distance
-        if (dist > Radius)
+        float dist = toTargetFlat.magnitude;
+
+        if (dist > Radius) return false;
+
+        if (Vector3.Angle(forwardFlat, toTargetFlat) > Angle * 0.5f)
             return false;
 
-        Vector3 dirToTarget = toTarget / dist;
-
-        // Angle
-        if (Vector3.Angle(forward, dirToTarget) > Angle * 0.5f)
+        if (Physics.Raycast(originPos + Vector3.up * 1f, toTarget.normalized, dist, ObstructionMask))
             return false;
-
-        // Obstruction
-        if (Physics.Raycast(originPos, dirToTarget, dist, ObstructionMask))
-            return false;
-
-        // --- Visualization ---
-        Vector3 leftBoundary = Quaternion.Euler(0, -Angle * 0.5f, 0) * forward;
-        Vector3 rightBoundary = Quaternion.Euler(0, Angle * 0.5f, 0) * forward;
-
-        Debug.DrawRay(originPos, forward * Radius, Color.green);
-        Debug.DrawRay(originPos, leftBoundary * Radius, Color.yellow);
-        Debug.DrawRay(originPos, rightBoundary * Radius, Color.yellow);
-
-        Debug.DrawLine(originPos, target.position, Color.red);
-
+        
         return true;
     }
 }

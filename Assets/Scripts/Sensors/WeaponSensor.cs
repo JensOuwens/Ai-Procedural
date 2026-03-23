@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WeaponSensor
 {
-    public static bool Sense(Transform target)
+    public bool Sense(Transform target)
     {
         if (target == null) return false;
 
