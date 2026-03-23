@@ -1,50 +1,60 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AgentContext : MonoBehaviour
 {
-    [SerializeField] private AgentAttackManager agentAttackManager;
-    [SerializeField] private AgentMovementManager agentMovementManager;
-    [SerializeField] private AgentPickUpManager agentPickUpManager;
-    [SerializeField] private AgentPatrolBehaviour patrolBehaviour;
+    private AgentAttackManager agentAttackManager;
+    private AgentMovementManager agentMovementManager;
+    private AgentPickUpManager agentPickUpManager;
+    private AgentPatrolBehaviour patrolBehaviour;
+    
+    [SerializeField] private NavMeshAgent navMeshAgent;
+    [SerializeField] private Transform agentTransform;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private IAgent agent;
+    [SerializeField] private List<Weapon> weapons;
+    [SerializeField] private List<Vector3> patrolPositions;
 
+    private void Awake()
+    {
+        agentMovementManager = new AgentMovementManager(navMeshAgent);
+        agentAttackManager = new AgentAttackManager(agentMovementManager, agentTransform, playerTransform);
+        agentPickUpManager = new AgentPickUpManager(agentMovementManager, agent, weapons, agentTransform);
+        patrolBehaviour = new AgentPatrolBehaviour(agentMovementManager, patrolPositions);
+    }
+    
     public void CallAgentAttackBehaviour(Node callBackNode)
     {
-        //Update status, for loop, check for status in agentattackbehavour, then call it in the node
-    }
-
-    public void CallAgentMovementBehaviour(Node callBackNode)
-    {
-        //Update status, for loop, check for status in CallAgentMovementBehaviour, then call it in the node
+        NodeStatus status = agentAttackManager.Tick();
+        callBackNode.currentStatus = status;
     }
 
     public void CallAgentPickUpBehaviour(Node callBackNode)
     {
-        //Update status, for loop, check for status in CallAgentPickUpBehaviour, then call it in the node
+        NodeStatus status = agentPickUpManager.Tick();
+        callBackNode.currentStatus = status;
     }
 
     public void CallAgentPatrolBehaviour(Node callBackNode)
     {
-        //Update status, for loop, check for status in CallAgentPatrolBehaviour, then call it in the node
+        NodeStatus status = patrolBehaviour.Tick();
+        callBackNode.currentStatus = status;
     }
 
     public void StopAgentAttackBehaviour()
     {
-        
+        agentAttackManager.Stop();
     }
-    
-    public void StopAgentMovementBehaviour()
-    {
-        
-    }   
     
     public void StopAgentPickUpBehaviour()
     {
-        
+        agentPickUpManager.Stop();
     }  
     
     public void StopAgentPatrolBehaviour()
     {
-        
+        patrolBehaviour.Stop();
     }
     
     

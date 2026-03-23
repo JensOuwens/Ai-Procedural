@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GuardAgent : MonoBehaviour
+public class GuardAgent : MonoBehaviour, IAgent
 {
-    public bool HasWeapon;
+    public bool HasWeapon { get; set; }
 }
