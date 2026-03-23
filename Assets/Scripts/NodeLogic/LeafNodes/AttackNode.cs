@@ -11,10 +11,14 @@ public class AttackNode : LeafNode
     }
     public override void Execute()
     {
-        if (currentStatus != NodeStatus.Running)
-            currentStatus = NodeStatus.Running;
-        
+        if (!agentContext.blackBoard.SeePlayer)
+        {
+            UpdateStatus(NodeStatus.Failed);
+            return;
+        }
+
         agentContext.CallAgentAttackBehaviour(this);
+        UpdateStatus(NodeStatus.Running);
     }
 
     public override void Reset()

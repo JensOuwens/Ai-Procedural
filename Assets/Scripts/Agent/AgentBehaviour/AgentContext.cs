@@ -12,9 +12,11 @@ public class AgentContext : MonoBehaviour
     [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private Transform agentTransform;
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private IAgent agent;
+    [SerializeField] private GuardAgent agent;
     [SerializeField] private List<Weapon> weapons;
     [SerializeField] private List<Vector3> patrolPositions;
+    
+    public BlackBoard blackBoard;
 
     private void Awake()
     {
@@ -26,18 +28,27 @@ public class AgentContext : MonoBehaviour
     
     public void CallAgentAttackBehaviour(Node callBackNode)
     {
+        StopAgentPatrolBehaviour();
+        StopAgentPickUpBehaviour();
+        
         NodeStatus status = agentAttackManager.Tick();
         callBackNode.currentStatus = status;
     }
 
     public void CallAgentPickUpBehaviour(Node callBackNode)
     {
+        StopAgentAttackBehaviour();
+        StopAgentPatrolBehaviour();
+        
         NodeStatus status = agentPickUpManager.Tick();
         callBackNode.currentStatus = status;
     }
 
     public void CallAgentPatrolBehaviour(Node callBackNode)
     {
+        StopAgentAttackBehaviour();
+        StopAgentPickUpBehaviour();
+        
         NodeStatus status = patrolBehaviour.Tick();
         callBackNode.currentStatus = status;
     }
@@ -57,7 +68,20 @@ public class AgentContext : MonoBehaviour
         patrolBehaviour.Stop();
     }
     
-    
+    public void MoveToPosition(Vector3 position)
+    {
+        agentMovementManager.Move(position);
+    }
+
+    public void StopMovement()
+    {
+        agentMovementManager.Stop();
+    }
+
+    public Vector3 GetAgentPosition()
+    {
+        return agentTransform.position;
+    }
     
     
 }

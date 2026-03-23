@@ -23,20 +23,25 @@ public class SelectorNode : CompositeNode
                 return;
             }
 
+            Node current = children[currentChild];
+            current.Execute();
 
-            children[currentChild].Execute();
+            var status = current.GetCurrentStatus();
 
-            if (children[currentChild].GetCurrentStatus() == NodeStatus.Completed)
+            if (status == NodeStatus.Completed)
             {
                 UpdateStatus(NodeStatus.Completed);
                 return;
             }
-            else if (children[currentChild].GetCurrentStatus() == NodeStatus.Failed)
+
+            if (status == NodeStatus.Failed)
             {
+                current.Reset();
                 currentChild++;
                 continue;
             }
-            else if (children[currentChild].GetCurrentStatus() == NodeStatus.Running)
+
+            if (status == NodeStatus.Running)
             {
                 UpdateStatus(NodeStatus.Running);
                 return;

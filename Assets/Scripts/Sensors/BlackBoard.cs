@@ -17,6 +17,8 @@ public class BlackBoard : MonoBehaviour
     // Visualization settings
     [SerializeField, Range(1, 50)] private int coneResolution = 20;
     [SerializeField] private Color coneColor = Color.yellow;
+    
+    public Vector3 lastKnownPlayerPosition;
 
     private void Awake()
     {
@@ -32,31 +34,41 @@ public class BlackBoard : MonoBehaviour
         hasWeapon = weaponSensor.Sense(GuardAgent.transform);
         SeePlayer = visionSensor.Sense(GuardAgent.transform, player.transform);
         DistanceToPlayer = distanceToPlayerSensor.Sense(GuardAgent.transform, player.transform);
+        
+        if (visionSensor.Sense(GuardAgent.transform, player.transform))
+        {
+            SeePlayer = true;
+            lastKnownPlayerPosition = player.transform.position;
+        }
+        else
+        {
+            SeePlayer = false;
+        }
     }
 
-    // private void OnDrawGizmos()
-    // {
-    //     if (GuardAgent == null) return;
-    //
-    //     // Draw Vision Cone
-    //     Vector3 originPos = GuardAgent.transform.position;
-    //     Vector3 forward = GuardAgent.transform.forward;
-    //
-    //     float step = visionSensor.Angle / coneResolution;
-    //
-    //     for (int i = 0; i <= coneResolution; i++)
-    //     {
-    //         float currentAngle = -visionSensor.Angle / 2 + step * i;
-    //         Vector3 rayDir = Quaternion.Euler(0, currentAngle, 0) * forward;
-    //         Gizmos.color = coneColor;
-    //         Gizmos.DrawRay(originPos, rayDir * visionSensor.Radius);
-    //     }
-    //
-    //     // Draw line to player if detected
-    //     if (SeePlayer && player != null)
-    //     {
-    //         Gizmos.color = Color.red;
-    //         Gizmos.DrawLine(originPos, player.transform.position);
-    //     }
-    // }
+    private void OnDrawGizmos()
+    {
+        if (GuardAgent == null) return;
+    
+        // Draw Vision Cone
+        Vector3 originPos = GuardAgent.transform.position;
+        Vector3 forward = GuardAgent.transform.forward;
+    
+        float step = visionSensor.Angle / coneResolution;
+    
+        for (int i = 0; i <= coneResolution; i++)
+        {
+            float currentAngle = -visionSensor.Angle / 2 + step * i;
+            Vector3 rayDir = Quaternion.Euler(0, currentAngle, 0) * forward;
+            Gizmos.color = coneColor;
+            Gizmos.DrawRay(originPos, rayDir * visionSensor.Radius);
+        }
+    
+        // Draw line to player if detected
+        if (SeePlayer && player != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(originPos, player.transform.position);
+        }
+    }
 }

@@ -11,10 +11,15 @@ public class PatrolNode : LeafNode
     }
     public override void Execute()
     {
-        if (currentStatus != NodeStatus.Running)
-            currentStatus = NodeStatus.Running;
-        
         agentContext.CallAgentPatrolBehaviour(this);
+
+        if (agentContext.blackBoard.SeePlayer)
+        {
+            UpdateStatus(NodeStatus.Failed);
+            return;
+        }
+
+        UpdateStatus(NodeStatus.Running);
     }
 
     public override void Reset()

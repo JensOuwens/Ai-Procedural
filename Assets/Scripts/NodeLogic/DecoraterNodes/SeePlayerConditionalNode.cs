@@ -30,5 +30,5 @@ public class SeePlayerConditionalNode : DecoratorNode
     {
         UpdateStatus(NodeStatus.Running);
         ChildNode.Reset();
-    }
+    } 
 }
