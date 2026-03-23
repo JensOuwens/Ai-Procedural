@@ -1,16 +1,18 @@
+using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AgentMovementManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] NavMeshAgent navmeshAgent;
+
+    public void Move(Vector3 destination)
     {
-        
+        navmeshAgent.SetDestination(destination);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Stop()
     {
-        
+        navmeshAgent.SetDestination(navmeshAgent.destination);
     }
 }
