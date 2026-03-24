@@ -5,6 +5,7 @@ public class BlackBoard : MonoBehaviour
     public bool hasWeapon;
     public bool SeePlayer;
     public float DistanceToPlayer;
+    public bool needsWeapon;
 
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private GameObject player;

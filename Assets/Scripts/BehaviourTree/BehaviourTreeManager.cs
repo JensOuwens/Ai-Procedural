@@ -32,17 +32,21 @@ public class BehaviourTreeManager : MonoBehaviour
         SelectorNode combatSelector = new SelectorNode(new List<Node>
         {
             hasWeaponAttack,
-            pickUpThenSearch
+            new NeedsWeaponInvertNode(blackboard, patrol)
         });
 
         // --- only run combat if we see the player ---
         SeePlayerConditionalNode seePlayerCombat =
             new SeePlayerConditionalNode(blackboard, combatSelector);
+        
+        NeedsWeaponConditionalNode needWeapon = 
+            new NeedsWeaponConditionalNode(blackboard, pickUpThenSearch);
 
         // --- ROOT ---
         root = new SelectorNode(new List<Node>
         {
             seePlayerCombat,
+            needWeapon,
             patrol
         });
     }

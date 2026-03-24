@@ -1,0 +1,30 @@
+using UnityEngine;
+
+public class NeedsWeaponInvertNode : DecoratorNode
+{
+    public override NodeStatus currentStatus { get; set; }
+    
+    public override BlackBoard blackboard { get; set; }
+    public override Node ChildNode { get; set; }
+
+    public NeedsWeaponInvertNode(BlackBoard blackboard, Node childNode)
+    {
+        this.blackboard = blackboard;
+        this.ChildNode = childNode;
+    }
+
+    public override void Execute()
+    {
+        if (!blackboard.needsWeapon)
+        {
+            blackboard.needsWeapon = true;
+        }
+    }
+
+    public override void Reset()
+    {
+        UpdateStatus(NodeStatus.Running);
+        ChildNode.Reset();
+    } 
+}
+
