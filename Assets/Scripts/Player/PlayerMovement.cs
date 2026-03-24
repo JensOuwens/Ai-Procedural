@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour, IDamageable
     public void DealDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
+        Debug.Log(currentHealth);
         if (currentHealth <= 0)
         {
             isDead = true;
