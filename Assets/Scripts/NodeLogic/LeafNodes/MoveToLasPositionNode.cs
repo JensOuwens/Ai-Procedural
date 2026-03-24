@@ -8,14 +8,18 @@ public class MoveToLastKnownPositionNode : LeafNode
     private BlackBoard blackboard;
     private float reachDistance = 1.5f;
 
-    public MoveToLastKnownPositionNode(AgentContext context, BlackBoard blackboard)
+    private BehaviourTreeManager tree;
+
+    public MoveToLastKnownPositionNode(AgentContext context, BlackBoard blackboard, BehaviourTreeManager tree)
     {
         this.agentContext = context;
         this.blackboard = blackboard;
+        this.tree = tree;
     }
 
     public override void Execute()
     {
+        //tree.SetState("Go to last seen player position");
         agentContext.MoveToPosition(blackboard.lastKnownPlayerPosition);
 
         float dist = Vector3.Distance(

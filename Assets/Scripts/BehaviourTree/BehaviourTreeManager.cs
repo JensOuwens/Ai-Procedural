@@ -1,20 +1,24 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BehaviourTreeManager : MonoBehaviour
 {
     [SerializeField] private BlackBoard blackboard;
     [SerializeField] private AgentContext agentContext;
+    [SerializeField] private TMP_Text stateText;
+    
+    public string CurrentState;
     
     public Node root;
 
     private void Awake()
     {
         // --- leaf nodes ---
-        PatrolNode patrol = new PatrolNode(agentContext);
-        AttackNode attack = new AttackNode(agentContext);
-        PickUpNode pickUp = new PickUpNode(agentContext);
-        Node moveToLastKnown = new MoveToLastKnownPositionNode(agentContext, blackboard);
+        PatrolNode patrol = new PatrolNode(agentContext, this);
+        AttackNode attack = new AttackNode(agentContext, this);
+        PickUpNode pickUp = new PickUpNode(agentContext, this);
+        Node moveToLastKnown = new MoveToLastKnownPositionNode(agentContext, blackboard, this);
 
         // --- has weapon -> attack ---
         HasWeaponConditionalNode hasWeaponAttack =
@@ -49,5 +53,12 @@ public class BehaviourTreeManager : MonoBehaviour
             needWeapon,
             patrol
         });
+    }
+    
+    public void SetState(string state)
+    {
+        CurrentState = state;
+        if (stateText != null)
+            stateText.text = state;
     }
 }
