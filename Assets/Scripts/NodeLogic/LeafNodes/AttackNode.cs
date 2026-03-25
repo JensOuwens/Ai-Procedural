@@ -14,6 +14,12 @@ public class AttackNode : LeafNode
     }
     public override void Execute()
     {
+        if (!agentContext.blackBoard.SeePlayer)
+        {
+            UpdateStatus(NodeStatus.Failed);
+            return;
+        }
+        
         //tree.SetState("Attacking");
         agentContext.CallAgentAttackBehaviour(this);
         UpdateStatus(NodeStatus.Running);

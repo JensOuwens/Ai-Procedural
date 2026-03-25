@@ -9,6 +9,10 @@ public class MoveToLastKnownPositionNode : LeafNode
     private float reachDistance = 1.5f;
 
     private BehaviourTreeManager tree;
+    
+    private float waitTime = 1f;
+    private float waitTimer = 0f;
+    private bool isWaiting = false;
 
     public MoveToLastKnownPositionNode(AgentContext context, BlackBoard blackboard, BehaviourTreeManager tree)
     {
@@ -19,7 +23,33 @@ public class MoveToLastKnownPositionNode : LeafNode
 
     public override void Execute()
     {
-        //tree.SetState("Go to last seen player position");
+        tree.SetState("Searching Last Position");
+
+        if (!blackboard.HasLastKnownPosition)
+        {
+            UpdateStatus(NodeStatus.Failed);
+            return;
+        }
+
+        if (isWaiting)
+        {
+            waitTimer += Time.deltaTime;
+
+            if (waitTimer >= waitTime)
+            {
+                waitTimer = 0f;
+                isWaiting = false;
+                blackboard.HasLastKnownPosition = false;
+                UpdateStatus(NodeStatus.Completed);
+            }
+            else
+            {
+                UpdateStatus(NodeStatus.Running);
+            }
+
+            return;
+        }
+
         agentContext.MoveToPosition(blackboard.lastKnownPlayerPosition);
 
         float dist = Vector3.Distance(
@@ -29,8 +59,8 @@ public class MoveToLastKnownPositionNode : LeafNode
 
         if (dist <= reachDistance)
         {
-            UpdateStatus(NodeStatus.Completed);
-            return;
+            isWaiting = true;
+            agentContext.StopMovement();
         }
 
         UpdateStatus(NodeStatus.Running);

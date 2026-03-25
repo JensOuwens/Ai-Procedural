@@ -46,11 +46,15 @@ public class BehaviourTreeManager : MonoBehaviour
         NeedsWeaponConditionalNode needWeapon = 
             new NeedsWeaponConditionalNode(blackboard, pickUpThenSearch);
 
+        HasLastKnownPositionConditionalNode lastKnown =
+            new HasLastKnownPositionConditionalNode(blackboard, moveToLastKnown);
+
         // --- ROOT ---
         root = new SelectorNode(new List<Node>
         {
             seePlayerCombat,
             needWeapon,
+            lastKnown,
             patrol
         });
     }

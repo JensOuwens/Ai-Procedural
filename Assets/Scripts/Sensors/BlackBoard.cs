@@ -6,6 +6,7 @@ public class BlackBoard : MonoBehaviour
     public bool SeePlayer;
     public float DistanceToPlayer;
     public bool needsWeapon;
+    public bool HasLastKnownPosition;
 
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private GameObject player;
@@ -40,6 +41,7 @@ public class BlackBoard : MonoBehaviour
         {
             SeePlayer = true;
             lastKnownPlayerPosition = player.transform.position;
+            HasLastKnownPosition = true;
         }
         else
         {
