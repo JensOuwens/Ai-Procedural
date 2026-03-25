@@ -21,6 +21,8 @@ public class BlackBoard : MonoBehaviour
     [SerializeField] private Color coneColor = Color.yellow;
     
     public Vector3 lastKnownPlayerPosition;
+    [SerializeField] private float visionMemoryTime = 1.5f;
+    private float lastSeenTime;
 
     private void Awake()
     {
@@ -37,15 +39,18 @@ public class BlackBoard : MonoBehaviour
         SeePlayer = visionSensor.Sense(GuardAgent.transform, player.transform);
         DistanceToPlayer = distanceToPlayerSensor.Sense(GuardAgent.transform, player.transform);
         
-        if (visionSensor.Sense(GuardAgent.transform, player.transform))
+        bool canSee = visionSensor.Sense(GuardAgent.transform, player.transform);
+
+        if (canSee)
         {
             SeePlayer = true;
+            lastSeenTime = Time.time;
             lastKnownPlayerPosition = player.transform.position;
             HasLastKnownPosition = true;
         }
         else
         {
-            SeePlayer = false;
+            SeePlayer = (Time.time - lastSeenTime) <= visionMemoryTime;
         }
     }
 

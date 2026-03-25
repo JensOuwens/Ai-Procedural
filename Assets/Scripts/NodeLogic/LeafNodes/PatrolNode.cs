@@ -10,10 +10,11 @@ public class PatrolNode : LeafNode
     public PatrolNode(AgentContext agentContext, BehaviourTreeManager tree)
     {
         this.agentContext = agentContext;
+        this.tree = tree;
     }
     public override void Execute()
     {
-        //tree.SetState("Patrol");
+        tree.SetState("Patrol");
         agentContext.CallAgentPatrolBehaviour(this);
 
         if (agentContext.blackBoard.SeePlayer)

@@ -61,7 +61,10 @@ public class BehaviourTreeManager : MonoBehaviour
     
     public void SetState(string state)
     {
+        if (!string.IsNullOrEmpty(CurrentState)) return;
+
         CurrentState = state;
+
         if (stateText != null)
             stateText.text = state;
     }

@@ -14,7 +14,7 @@ public class PickUpNode : LeafNode
     }
     public override void Execute()
     {
-        //tree.SetState("PickUpWeapon");
+        tree.SetState("PickUpWeapon");
         
         if (currentStatus != NodeStatus.Running)
             currentStatus = NodeStatus.Running;

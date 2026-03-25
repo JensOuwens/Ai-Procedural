@@ -7,6 +7,7 @@ public class GuardAgent : MonoBehaviour, IAgent
 
     private void Update()
     {
+        behaviourTreeManager.CurrentState = "";
         behaviourTreeManager.root.Execute();
     }
 }

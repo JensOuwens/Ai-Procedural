@@ -20,7 +20,8 @@ public class AttackNode : LeafNode
             return;
         }
         
-        //tree.SetState("Attacking");
+        tree.SetState("Attacking");
+        
         agentContext.CallAgentAttackBehaviour(this);
         UpdateStatus(NodeStatus.Running);
     }
