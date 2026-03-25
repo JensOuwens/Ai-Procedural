@@ -8,7 +8,8 @@ public class AgentPatrolBehaviour
     private List<Vector3> patrolSpots;
 
     private int currentIndex = -1;
-    private float reachDistance = 1f;
+    private float reachDistance = 1f;      
+    private float reachBuffer = 0.5f;      
 
     private float waitTime = 1f;
     private float waitTimer = 0f;
@@ -23,38 +24,46 @@ public class AgentPatrolBehaviour
     public NodeStatus Tick()
     {
         if (patrolSpots == null || patrolSpots.Count == 0)
+        {
             return NodeStatus.Failed;
+        }
+
 
         if (currentIndex == -1)
+        {
             currentIndex = Random.Range(0, patrolSpots.Count);
+        }
 
         Vector3 target = patrolSpots[currentIndex];
+        Vector3 currentPos = movementPosition();
 
-        // --- WAITING STATE ---
+
+        float reachSqr = (reachDistance + reachBuffer) * (reachDistance + reachBuffer);
+        if (!isWaiting && (target - currentPos).sqrMagnitude <= reachSqr)
+        {
+            isWaiting = true;
+            waitTimer = 0f;
+            movement.Stop();
+            return NodeStatus.Running;
+        }
+        
         if (isWaiting)
         {
             waitTimer += Time.deltaTime;
 
             if (waitTimer >= waitTime)
             {
-                isWaiting = false;
                 waitTimer = 0f;
-                currentIndex = GetNextIndex();
+                isWaiting = false;
+
+                int nextIndex = GetNextIndex();
+                currentIndex = nextIndex;
             }
 
             return NodeStatus.Running;
         }
 
-        // --- MOVING STATE ---
         movement.Move(target);
-
-        float dist = Vector3.Distance(target, movementPosition());
-
-        if (dist <= reachDistance)
-        {
-            isWaiting = true;
-            movement.Stop(); // stop while waiting
-        }
 
         return NodeStatus.Running;
     }
@@ -65,9 +74,15 @@ public class AgentPatrolBehaviour
             return 0;
 
         int newIndex;
+        int attempts = 0;
         do
         {
             newIndex = Random.Range(0, patrolSpots.Count);
+            attempts++;
+            if (attempts > 10)
+            {
+                break;
+            }
         } 
         while (newIndex == currentIndex);
 
@@ -76,13 +91,19 @@ public class AgentPatrolBehaviour
 
     private Vector3 movementPosition()
     {
-        return movement.GetType()
-            .GetField("navmeshAgent", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(movement) is NavMeshAgent agent ? agent.transform.position : Vector3.zero;
+        var navAgentField = movement.GetType().GetField("navmeshAgent", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (navAgentField == null) return Vector3.zero;
+
+        if (navAgentField.GetValue(movement) is NavMeshAgent agent)
+            return agent.transform.position;
+
+        return Vector3.zero;
     }
 
     public void Stop()
     {
         movement.Stop();
+        isWaiting = false;
+        waitTimer = 0f;
     }
 }

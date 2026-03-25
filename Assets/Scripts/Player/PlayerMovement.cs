@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour, IDamageable
         {
             isDead = true;
             currentHealth = 0;
+            Destroy(this.gameObject);
         }
     }
 }

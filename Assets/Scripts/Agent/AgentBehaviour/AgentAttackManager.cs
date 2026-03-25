@@ -42,7 +42,7 @@ public class AgentAttackManager
             lastAttackTime = Time.time;
         }
 
-        return NodeStatus.Running; // still attacking loop
+        return NodeStatus.Running;
     }
 
     public void Stop()

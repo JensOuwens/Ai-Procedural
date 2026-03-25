@@ -14,32 +14,27 @@ public class BehaviourTreeManager : MonoBehaviour
 
     private void Awake()
     {
-        // --- leaf nodes ---
         PatrolNode patrol = new PatrolNode(agentContext, this);
         AttackNode attack = new AttackNode(agentContext, this);
         PickUpNode pickUp = new PickUpNode(agentContext, this);
         Node moveToLastKnown = new MoveToLastKnownPositionNode(agentContext, blackboard, this);
-
-        // --- has weapon -> attack ---
+        
         HasWeaponConditionalNode hasWeaponAttack =
             new HasWeaponConditionalNode(blackboard, attack);
-
-        // --- no weapon -> pick up -> attack ---
+        
         SequenceNode pickUpThenSearch = new SequenceNode(new List<Node>
         {
             pickUp,
             moveToLastKnown,
             attack
         });
-
-        // --- choose between attack OR pick up first ---
+        
         SelectorNode combatSelector = new SelectorNode(new List<Node>
         {
             hasWeaponAttack,
             new NeedsWeaponInvertNode(blackboard, patrol)
         });
-
-        // --- only run combat if we see the player ---
+        
         SeePlayerConditionalNode seePlayerCombat =
             new SeePlayerConditionalNode(blackboard, combatSelector);
         
@@ -48,8 +43,7 @@ public class BehaviourTreeManager : MonoBehaviour
 
         HasLastKnownPositionConditionalNode lastKnown =
             new HasLastKnownPositionConditionalNode(blackboard, moveToLastKnown);
-
-        // --- ROOT ---
+        
         root = new SelectorNode(new List<Node>
         {
             seePlayerCombat,
