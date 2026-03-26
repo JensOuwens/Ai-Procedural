@@ -64,27 +64,27 @@ public class BlackBoard : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (GuardAgent == null) return;
-        
-        Vector3 originPos = GuardAgent.transform.position;
-        Vector3 forward = GuardAgent.transform.forward;
-
-        float step = visionSensor.Angle / coneResolution;
-
-        for (int i = 0; i <= coneResolution; i++)
-        {
-            float currentAngle = -visionSensor.Angle / 2 + step * i;
-            Vector3 rayDir = Quaternion.Euler(0, currentAngle, 0) * forward;
-            Gizmos.color = coneColor;
-            Gizmos.DrawRay(originPos, rayDir * visionSensor.Radius);
-        }
-        
-        if (SeePlayer && player != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(originPos, player.transform.position);
-        }
-    }
+//     private void OnDrawGizmos()
+//     {
+//         if (GuardAgent == null) return;
+//         
+//         Vector3 originPos = GuardAgent.transform.position;
+//         Vector3 forward = GuardAgent.transform.forward;
+//
+//         float step = visionSensor.Angle / coneResolution;
+//
+//         for (int i = 0; i <= coneResolution; i++)
+//         {
+//             float currentAngle = -visionSensor.Angle / 2 + step * i;
+//             Vector3 rayDir = Quaternion.Euler(0, currentAngle, 0) * forward;
+//             Gizmos.color = coneColor;
+//             Gizmos.DrawRay(originPos, rayDir * visionSensor.Radius);
+//         }
+//         
+//         if (SeePlayer && player != null)
+//         {
+//             Gizmos.color = Color.red;
+//             Gizmos.DrawLine(originPos, player.transform.position);
+//         }
+//     }
 }
