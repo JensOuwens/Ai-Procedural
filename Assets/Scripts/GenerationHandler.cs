@@ -35,5 +35,10 @@ public class GenerationHandler : MonoBehaviour
         int gridWidth = grid.GetLength(0);
         int gridLength = grid.GetLength(1);
         Debug.Log(gridWidth + " x " + gridLength);
+
+        foreach (Cell cell in grid)
+        {
+            Debug.Log(cell.position + " " + cell.wallType);
+        }
     }
 }
