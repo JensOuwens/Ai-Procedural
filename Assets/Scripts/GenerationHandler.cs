@@ -22,10 +22,18 @@ public class GenerationHandler : MonoBehaviour
     public void Generate()
     {
         grid = gridHandler.CreateGrid();
+        GridSizeDebug();
     }
 
     public void RandomizeSeed()
     {
         seed = Random.Range(0, 999999);
+    }
+
+    private void GridSizeDebug()
+    {
+        int gridWidth = grid.GetLength(0);
+        int gridLength = grid.GetLength(1);
+        Debug.Log(gridWidth + " x " + gridLength);
     }
 }

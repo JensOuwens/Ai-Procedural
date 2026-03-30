@@ -7,7 +7,7 @@ public static class GridUtils
         int gridWidth = grid.GetLength(0);
         int gridLength = grid.GetLength(1);
 
-        if (point.x <= gridWidth - 1 && point.y <= gridLength - 1)
+        if (point.x <= gridWidth && point.y <= gridLength)
         {
             return true;
         }
