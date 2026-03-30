@@ -7,11 +7,13 @@ public class GenerationHandler : MonoBehaviour
 {
     private Cell[,] grid;
     private List<Room> roomList;
+    private Cell[,] path;
 
     [SerializeField]private int seed;
     
     [Header("references")]
     [SerializeField] private GridHandler gridHandler;
+    [SerializeField] private RandomWalk randomWalk;
 
     private void Start()
     {
@@ -22,7 +24,8 @@ public class GenerationHandler : MonoBehaviour
     public void Generate()
     {
         grid = gridHandler.CreateGrid();
-        GridSizeDebug();
+        grid = randomWalk.RandomlyWalk(grid);
+        GridDebug();
     }
 
     public void RandomizeSeed()
@@ -30,7 +33,7 @@ public class GenerationHandler : MonoBehaviour
         seed = Random.Range(0, 999999);
     }
 
-    private void GridSizeDebug()
+    private void GridDebug()
     {
         int gridWidth = grid.GetLength(0);
         int gridLength = grid.GetLength(1);
@@ -38,7 +41,7 @@ public class GenerationHandler : MonoBehaviour
 
         foreach (Cell cell in grid)
         {
-            Debug.Log(cell.position + " " + cell.wallType);
+             Debug.Log(cell.position + " " + cell.wallType + " " + cell.tileType);
         }
     }
 }

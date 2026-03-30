@@ -26,27 +26,26 @@ public class GridHandler : MonoBehaviour
         int gridWidth = grid.GetLength(0) - 1;
         int gridHeight = grid.GetLength(1) - 1;
         
-        for(int i=0;i < gridHeight;i++)
+        for (int y = 0; y <= gridHeight; y++)
         {
-            grid[0 , i].tileType = TileType.Wall;
-            grid[0 , i].wallType = WallType.Indestructible;
-            grid[0, i].contentType = ContentType.None;
-            
-            grid[gridHeight , i].tileType = TileType.Wall;
-            grid[gridHeight , i].wallType = WallType.Indestructible;
-            grid[gridHeight, i].contentType = ContentType.None;
+            grid[0, y].tileType = TileType.Wall;
+            grid[0, y].wallType = WallType.Indestructible;
+            grid[0, y].contentType = ContentType.None;
+
+            grid[gridWidth, y].tileType = TileType.Wall;
+            grid[gridWidth, y].wallType = WallType.Indestructible;
+            grid[gridWidth, y].contentType = ContentType.None;
         }
         
-
-        for(int i=0;i < gridWidth;i++)
+        for (int x = 0; x <= gridWidth; x++)
         {
-            grid[i , 0].tileType = TileType.Wall;
-            grid[i , 0].wallType = WallType.Indestructible;
-            grid[i, 0].contentType = ContentType.None;
-            
-            grid[i , gridWidth].tileType = TileType.Wall;
-            grid[i , gridWidth].wallType = WallType.Indestructible;
-            grid[i, gridWidth].contentType = ContentType.None;
+            grid[x, 0].tileType = TileType.Wall;
+            grid[x, 0].wallType = WallType.Indestructible;
+            grid[x, 0].contentType = ContentType.None;
+
+            grid[x, gridHeight].tileType = TileType.Wall;
+            grid[x, gridHeight].wallType = WallType.Indestructible;
+            grid[x, gridHeight].contentType = ContentType.None;
         }
         
         return grid;

@@ -149,7 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenerationHandler
   seed: 0
+  debugCubePrefab: {fileID: 6343413955671184586, guid: 2291f84557f294841ab92a2519cd1090, type: 3}
   gridHandler: {fileID: 2051618582}
+  randomWalk: {fileID: 518679528}
 --- !u!4 &38052661
 Transform:
   m_ObjectHideFlags: 0
@@ -429,6 +431,51 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &518679526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 518679527}
+  - component: {fileID: 518679528}
+  m_Layer: 0
+  m_Name: RandomWalk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &518679527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518679526}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.50497, y: 0, z: 0.13326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1398952766}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &518679528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518679526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbf3233e5b0d9646917d16d1202b807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomWalk
+  numberOfSteps: 250
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,6 +556,7 @@ Transform:
   m_Children:
   - {fileID: 38052661}
   - {fileID: 2051618581}
+  - {fileID: 518679527}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2051618580
@@ -555,8 +603,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d69882b00d17fc4a91d4f0bbdbc6d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridHandler
-  minGridSize: {x: 4, y: 4}
-  maxGridSize: {x: 15, y: 15}
+  minGridSize: {x: 20, y: 20}
+  maxGridSize: {x: 50, y: 50}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
