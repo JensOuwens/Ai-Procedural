@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,15 +6,18 @@ public class GenerationHandler : MonoBehaviour
 {
     private Cell[,] grid;
     private List<Room> roomList = new List<Room>();
-    private Cell[,] path;
 
-    [SerializeField]private int seed;
-    
+    private Color red = Color.red;
+    private Color green = Color.green;
+    private Color yellow = Color.yellow;
+
+    [SerializeField] private int seed;
+
     [Header("references")]
     [SerializeField] private GridHandler gridHandler;
     [SerializeField] private RandomWalk randomWalk;
     [SerializeField] private RoomPlacement roomPlacement;
-    
+    [SerializeField] private StartAndExitPlacement startAndExitPlacement;
     [SerializeField] private GameObject cubePrefab;
 
     private void Start()
@@ -28,7 +30,10 @@ public class GenerationHandler : MonoBehaviour
     {
         grid = gridHandler.CreateGrid();
         grid = randomWalk.RandomlyWalk(grid);
+
         roomList = roomPlacement.generateRooms(grid);
+        roomList = startAndExitPlacement.Place(grid, roomList);
+
         GridDebug();
     }
 
@@ -42,33 +47,24 @@ public class GenerationHandler : MonoBehaviour
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
 
-        Debug.Log(width + " x " + height);
-
-        // clear previous
         foreach (Transform child in transform)
-        {
             Destroy(child.gameObject);
-        }
 
         GameObject[,] spawned = new GameObject[width, height];
-
-        // spawn cubes
+        
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 Cell cell = grid[x, y];
 
-                Vector3 pos = new Vector3(x, 0, y);
-                GameObject cube = Instantiate(cubePrefab, pos, Quaternion.identity, transform);
+                GameObject cube = Instantiate(cubePrefab, new Vector3(x, 0, y), Quaternion.identity, transform);
 
                 Renderer r = cube.GetComponent<Renderer>();
                 if (r == null) continue;
 
-                // IMPORTANT: create instance material
                 r.material = new Material(r.material);
 
-                // base color
                 if (cell.tileType == TileType.Floor)
                 {
                     r.material.color = Color.white;
@@ -85,28 +81,43 @@ public class GenerationHandler : MonoBehaviour
             }
         }
 
-        // overlay rooms
         if (roomList == null) return;
-
+        
         foreach (Room room in roomList)
         {
-            if (room.tiles == null) continue;
-
-            foreach (Cell cell in room.tiles)
+            Color useColor = room.roomType switch
             {
-                int x = cell.position.x;
-                int y = cell.position.y;
+                RoomType.Start => green,
+                RoomType.Boss => red,
+                _ => yellow
+            };
 
-                if (x < 0 || x >= width || y < 0 || y >= height)
+            foreach (Vector2Int pos in room.tiles)
+            {
+                if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height)
                     continue;
 
-                GameObject cube = spawned[x, y];
+                GameObject cube = spawned[pos.x, pos.y];
                 if (cube == null) continue;
 
                 Renderer r = cube.GetComponent<Renderer>();
                 if (r == null) continue;
 
-                r.material.color = Color.red;
+                Cell cell = grid[pos.x, pos.y];
+
+                if (cell.contentType == ContentType.Start)
+                {
+                    r.material.color = Color.blue;
+                    continue;
+                }
+
+                if (cell.contentType == ContentType.Exit)
+                {
+                    r.material.color = Color.magenta;
+                    continue;
+                }
+
+                r.material.color = useColor;
             }
         }
     }
