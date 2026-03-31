@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class GenerationHandler : MonoBehaviour
 {
     private Cell[,] grid;
-    private List<Room> roomList;
+    private List<Room> roomList = new List<Room>();
     private Cell[,] path;
 
     [SerializeField]private int seed;
@@ -14,6 +14,7 @@ public class GenerationHandler : MonoBehaviour
     [Header("references")]
     [SerializeField] private GridHandler gridHandler;
     [SerializeField] private RandomWalk randomWalk;
+    [SerializeField] private RoomPlacement roomPlacement;
 
     private void Start()
     {
@@ -25,6 +26,7 @@ public class GenerationHandler : MonoBehaviour
     {
         grid = gridHandler.CreateGrid();
         grid = randomWalk.RandomlyWalk(grid);
+        roomList = roomPlacement.generateRooms(grid);
         GridDebug();
     }
 
