@@ -78,7 +78,7 @@ public class RoomPlacement : MonoBehaviour
                             break;
                         }
 
-                        if (occupied.Contains(pos))
+                        if (occupied.Contains(pos) || IsNearOccupied(pos))
                         {
                             invalid = true;
                             break;
@@ -162,7 +162,7 @@ public class RoomPlacement : MonoBehaviour
                                 break;
                             }
 
-                            if (occupied.Contains(pos))
+                            if (occupied.Contains(pos) || IsNearOccupied(pos))
                             {
                                 invalid = true;
                                 break;
@@ -194,5 +194,23 @@ public class RoomPlacement : MonoBehaviour
         }
 
         return rooms;
+    }
+    
+    bool IsNearOccupied(Vector2Int pos)
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+
+                Vector2Int check = new Vector2Int(pos.x + dx, pos.y + dy);
+
+                if (occupied.Contains(check))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

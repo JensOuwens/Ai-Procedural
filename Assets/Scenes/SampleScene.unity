@@ -148,10 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db89c193f42aaf488d9d51f7a113400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenerationHandler
-  seed: 0
-  debugCubePrefab: {fileID: 6343413955671184586, guid: 2291f84557f294841ab92a2519cd1090, type: 3}
+  seed: 44433
   gridHandler: {fileID: 2051618582}
   randomWalk: {fileID: 518679528}
+  roomPlacement: {fileID: 1662837667}
+  cubePrefab: {fileID: 2954374253766728374, guid: d5ddc9ed3df3b3b40b5b309acf680986, type: 3}
 --- !u!4 &38052661
 Transform:
   m_ObjectHideFlags: 0
@@ -475,7 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbf3233e5b0d9646917d16d1202b807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomWalk
-  numberOfSteps: 250
+  numberOfSteps: 500
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,8 +558,61 @@ Transform:
   - {fileID: 38052661}
   - {fileID: 2051618581}
   - {fileID: 518679527}
+  - {fileID: 1662837666}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1662837665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1662837666}
+  - component: {fileID: 1662837667}
+  m_Layer: 0
+  m_Name: RoomPlacer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1662837666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662837665}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 16.87922, y: 0, z: 14.55107}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1398952766}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1662837667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662837665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fedee7a1368f96642b4bde19d97df49c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomPlacement
+  minRooms: 2
+  maxRooms: 5
+  minRoomSize: {x: 3, y: 3}
+  maxRoomSize: {x: 10, y: 10}
+  spawnChance: 20
+  maxAttempts: 300
+  minOffsetValue: -2
+  maxOffsetValue: 2
 --- !u!1 &2051618580
 GameObject:
   m_ObjectHideFlags: 0
