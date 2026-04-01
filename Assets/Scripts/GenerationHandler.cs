@@ -18,6 +18,8 @@ public class GenerationHandler : MonoBehaviour
     [SerializeField] private RandomWalk randomWalk;
     [SerializeField] private RoomPlacement roomPlacement;
     [SerializeField] private StartAndExitPlacement startAndExitPlacement;
+    [SerializeField] private ContentPlacement contentPlacement;
+    
     [SerializeField] private GameObject cubePrefab;
 
     private void Start()
@@ -33,6 +35,8 @@ public class GenerationHandler : MonoBehaviour
 
         roomList = roomPlacement.generateRooms(grid);
         roomList = startAndExitPlacement.Place(grid, roomList);
+        
+        roomList = contentPlacement.DetermineRooms(roomList);
 
         GridDebug();
     }
