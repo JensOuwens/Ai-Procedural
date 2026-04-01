@@ -148,11 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db89c193f42aaf488d9d51f7a113400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenerationHandler
-  seed: 76
+  seed: 654
   gridHandler: {fileID: 2051618582}
   randomWalk: {fileID: 518679528}
   roomPlacement: {fileID: 1662837667}
   startAndExitPlacement: {fileID: 1176484651}
+  contentPlacement: {fileID: 1384891877}
   cubePrefab: {fileID: 2954374253766728374, guid: d5ddc9ed3df3b3b40b5b309acf680986, type: 3}
 --- !u!4 &38052661
 Transform:
@@ -571,6 +572,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d88451d9cf44a44b07b19e07cdef90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartAndExitPlacement
+--- !u!1 &1384891875
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1384891876}
+  - component: {fileID: 1384891877}
+  m_Layer: 0
+  m_Name: ContentGeneration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1384891876
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384891875}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1398952766}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1384891877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384891875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233e5f01d3c80514b93cfd5b4c9bf2df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ContentPlacement
+  minEnemiesPerRoom: 0
+  maxEnemiesPerRoom: 0
+  minTreasurePerRoom: 0
+  maxTreasurePerRoom: 0
+  treasureRoomChance: 20
+  hiddenRoomChance: 10
+  EnemyCorridorSpawnChance: 5
+  TreasureCorridorSpawnChance: 7
 --- !u!1 &1398952765
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,6 +658,7 @@ Transform:
   - {fileID: 518679527}
   - {fileID: 1662837666}
   - {fileID: 1176484650}
+  - {fileID: 1384891876}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1662837665

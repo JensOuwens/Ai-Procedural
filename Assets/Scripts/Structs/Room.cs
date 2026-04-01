@@ -9,6 +9,8 @@ public struct Room
 
     public int EnemyAmount;
     public int treasureAmount;
+    public int currentEnemyAmount;
+    public int currentTreasureAmount;
 
     public Room(Vector2Int center, List<Vector2Int> tiles)
     {
@@ -19,6 +21,8 @@ public struct Room
         
         EnemyAmount = 0;
         treasureAmount = 0;
+        currentEnemyAmount = 0;
+        currentTreasureAmount = 0;
     }
 
     public void RandomizeEnemyAmount(int minEnemyAmount, int MaxEnemyAmount)

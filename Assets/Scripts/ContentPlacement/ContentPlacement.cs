@@ -14,86 +14,85 @@ public class ContentPlacement : MonoBehaviour
     [SerializeField] private int EnemyCorridorSpawnChance;
     [SerializeField] private int TreasureCorridorSpawnChance;
     
+    private Dictionary<Vector2Int, int> cellToRoomIndex = new Dictionary<Vector2Int, int>();
+
     public List<Room> DetermineRooms(List<Room> roomList)
     {
-        int roomNumber = 0;
-        
-        foreach (Room room in roomList)
+        for (int i = 0; i < roomList.Count; i++)
         {
-            if (room.roomType == RoomType.Boss || room.roomType == RoomType.Start)
+            Room currentRoom = roomList[i];
+
+            if (currentRoom.roomType == RoomType.Boss || currentRoom.roomType == RoomType.Start)
             {
-                roomNumber++;
-                if (room.roomType == RoomType.Boss)
+                if (currentRoom.roomType == RoomType.Boss)
                 {
-                    room.RandomizeTreasureAmount(0,4);
-                    room.RandomizeEnemyAmount(1,8);
+                    currentRoom.RandomizeTreasureAmount(0, 4);
+                    currentRoom.RandomizeEnemyAmount(1, 8);
                 }
+
+                roomList[i] = currentRoom;
                 continue;
             }
-            
-            int chanceRoll = Random.Range(0, 100);
 
-            Room currentRoom = room;
+            int chanceRoll = Random.Range(0, 100);
 
             if (chanceRoll < hiddenRoomChance)
             {
                 currentRoom.roomType = RoomType.Hidden;
-                currentRoom.RandomizeTreasureAmount(2,4);
-                currentRoom.RandomizeEnemyAmount(0,0);
+                currentRoom.RandomizeTreasureAmount(2, 4);
+                currentRoom.RandomizeEnemyAmount(0, 0);
             }
-            //will break if exceeding 100 percent
             else if (chanceRoll < treasureRoomChance + hiddenRoomChance)
             {
                 currentRoom.roomType = RoomType.Treasure;
-                currentRoom.RandomizeTreasureAmount(4,6);
-                currentRoom.RandomizeEnemyAmount(0,3);
+                currentRoom.RandomizeTreasureAmount(4, 6);
+                currentRoom.RandomizeEnemyAmount(0, 3);
             }
             else
             {
                 currentRoom.roomType = RoomType.Normal;
-                currentRoom.RandomizeTreasureAmount(0,2);
-                currentRoom.RandomizeEnemyAmount(1,3);
+                currentRoom.RandomizeTreasureAmount(0, 2);
+                currentRoom.RandomizeEnemyAmount(1, 3);
             }
-            
-            roomList[roomNumber] = currentRoom;
-            roomNumber++;
+
+            currentRoom.currentEnemyAmount = 0;
+            currentRoom.currentTreasureAmount = 0;
+
+            roomList[i] = currentRoom;
         }
-        
+
         return roomList;
     }
-    
+
     public Cell[,] populateGrid(Cell[,] grid, List<Room> roomList)
     {
+        cellToRoomIndex.Clear();
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            foreach (Vector2Int pos in roomList[i].tiles)
+            {
+                cellToRoomIndex[pos] = i;
+            }
+        }
+
         foreach (Cell cell in grid)
         {
-            bool cellIsInRoom = false;
-            RoomType cellRoomType = RoomType.Normal;
-            
             if (cell.tileType != TileType.Floor) continue;
-
-            foreach (Room room in roomList)
-            {
-                foreach (Vector2Int cellRoomPos in room.tiles)
-                {
-                    if (cell.position == cellRoomPos)
-                    {
-                        cellIsInRoom = true;
-                        cellRoomType = room.roomType;
-                        break;
-                    }
-                }
-            }
+            if (cell.contentType == ContentType.Start) continue;
 
             Cell currentCell = cell;
-            if (!cellIsInRoom)
-            {
-                int chanceRoll = Random.Range(0, 100);
 
-                if (chanceRoll < TreasureCorridorSpawnChance)
+            bool isInRoom = cellToRoomIndex.TryGetValue(cell.position, out int roomIndex);
+
+            if (!isInRoom)
+            {
+                int roll = Random.Range(0, 100);
+
+                if (roll < TreasureCorridorSpawnChance)
                 {
                     currentCell.contentType = ContentType.Loot;
                 }
-                else if (chanceRoll < TreasureCorridorSpawnChance + EnemyCorridorSpawnChance)
+                else if (roll < TreasureCorridorSpawnChance + EnemyCorridorSpawnChance)
                 {
                     currentCell.contentType = ContentType.Enemy;
                 }
@@ -102,56 +101,100 @@ public class ContentPlacement : MonoBehaviour
                     currentCell.contentType = ContentType.None;
                 }
             }
-            
             else
             {
-                //switch spawn percentages
-                int enemySpawnChance = 0;
-                int TreasureSpawnChance = 0;
-                
-                switch (cellRoomType)
+                Room room = roomList[roomIndex];
+
+                int enemyChance = 0;
+                int treasureChance = 0;
+
+                switch (room.roomType)
                 {
                     case RoomType.Normal:
-                        enemySpawnChance = 40;
-                        TreasureSpawnChance = 10;
+                        enemyChance = 40;
+                        treasureChance = 10;
                         break;
                     case RoomType.Hidden:
-                        enemySpawnChance = 10;
-                        TreasureSpawnChance = 40;
+                        enemyChance = 10;
+                        treasureChance = 40;
                         break;
-                    case  RoomType.Treasure:
-                        enemySpawnChance = 20;
-                        TreasureSpawnChance = 50;
+                    case RoomType.Treasure:
+                        enemyChance = 20;
+                        treasureChance = 50;
                         break;
                     case RoomType.Boss:
-                        enemySpawnChance = 60;
-                        TreasureSpawnChance = 20;
+                        enemyChance = 60;
+                        treasureChance = 20;
                         break;
                     case RoomType.Start:
-                        enemySpawnChance = 0;
-                        TreasureSpawnChance = 0;
+                        enemyChance = 0;
+                        treasureChance = 0;
                         break;
                 }
-                
-                //loop actually attempt to spawn stuff
-                
+
+                int roll = Random.Range(0, 100);
+
+                if (roll < treasureChance)
+                {
+                    if (room.currentTreasureAmount < room.treasureAmount)
+                    {
+                        currentCell.contentType = ContentType.Loot;
+
+                        room.currentTreasureAmount++;
+                        roomList[roomIndex] = room;
+                    }
+                }
+                else if (roll < treasureChance + enemyChance)
+                {
+                    if (room.currentEnemyAmount < room.EnemyAmount)
+                    {
+                        currentCell.contentType = ContentType.Enemy;
+
+                        room.currentEnemyAmount++;
+                        roomList[roomIndex] = room;
+                    }
+                }
+                else
+                {
+                    currentCell.contentType = ContentType.None;
+                }
             }
-            
+
             grid[currentCell.position.x, currentCell.position.y] = currentCell;
-            
         }
         
-        //check if all rooms have reached the required amount
-        //if so return
-        //if not loop through rooms
-        //check every tile
-        //if tile is occupied, ignore it
-        //if tile is not occupied, force spawn
-        //repeat for certain attemps amount to prevent infinite loop
-        //return
-        
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            Room room = roomList[i];
+
+            foreach (Vector2Int pos in room.tiles)
+            {
+                if (room.currentEnemyAmount >= room.EnemyAmount &&
+                    room.currentTreasureAmount >= room.treasureAmount)
+                    break;
+
+                Cell cell = grid[pos.x, pos.y];
+
+                if (cell.tileType != TileType.Floor || cell.contentType != ContentType.None)
+                    continue;
+
+                if (room.currentEnemyAmount < room.EnemyAmount)
+                {
+                    cell.contentType = ContentType.Enemy;
+                    room.currentEnemyAmount++;
+                }
+                else if (room.currentTreasureAmount < room.treasureAmount)
+                {
+                    cell.contentType = ContentType.Loot;
+                    room.currentTreasureAmount++;
+                }
+
+                grid[pos.x, pos.y] = cell;
+            }
+
+            roomList[i] = room;
+        }
+
         return grid;
     }
-    
-
 }
