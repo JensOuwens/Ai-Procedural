@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db89c193f42aaf488d9d51f7a113400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenerationHandler
-  seed: 654
+  seed: 758
   gridHandler: {fileID: 2051618582}
   randomWalk: {fileID: 518679528}
   roomPlacement: {fileID: 1662837667}
@@ -478,7 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbf3233e5b0d9646917d16d1202b807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomWalk
-  numberOfSteps: 500
+  numberOfSteps: 350
+  unvisitedBias: 0.085
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridHandler
   minGridSize: {x: 20, y: 20}
-  maxGridSize: {x: 50, y: 50}
+  maxGridSize: {x: 35, y: 35}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -3,17 +3,17 @@ using UnityEngine;
 public class RandomWalk : MonoBehaviour
 {
     [SerializeField] private int numberOfSteps;
+    [SerializeField, Range(0f, 1f)] private float unvisitedBias = 0.2f;
+
     int attempts = 0;
     private int maxAttempts;
-    
 
     public Cell[,] RandomlyWalk(Cell[,] grid)
     {
         int currentStep = 0;
         attempts = 0;
         maxAttempts = numberOfSteps * 10;
-        
-        //grab random position in the grid
+
         Vector2Int maxGridPos = new Vector2Int(grid.GetLength(0) - 1, grid.GetLength(1) - 1);
 
         Vector2Int randomStartPos;
@@ -21,74 +21,140 @@ public class RandomWalk : MonoBehaviour
         do
         {
             randomStartPos = new Vector2Int(
-                Random.Range(0, maxGridPos.x+1),
-                Random.Range(0, maxGridPos.y+1)
+                Random.Range(0, maxGridPos.x + 1),
+                Random.Range(0, maxGridPos.y + 1)
             );
         }
         while (
             grid[randomStartPos.x, randomStartPos.y].tileType == TileType.Wall &&
             grid[randomStartPos.x, randomStartPos.y].wallType == WallType.Indestructible
         );
-        
-        
-        Cell startCell =  grid[randomStartPos.x, randomStartPos.y];
+
+        Cell startCell = grid[randomStartPos.x, randomStartPos.y];
         startCell.tileType = TileType.Floor;
         grid[randomStartPos.x, randomStartPos.y] = startCell;
-        
+
         Cell currentCell = startCell;
 
         while (currentStep < numberOfSteps && attempts < maxAttempts)
         {
             attempts++;
-            //take a step
-            int StepDirectionID = Random.Range(0, 4);
-            Vector2Int stepDirection = Vector2Int.zero;
-            
-            switch (StepDirectionID)
+
+            Vector2Int nextPos;
+            Cell nextCell;
+
+            int safety = 0;
+
+            do
             {
-                case 0: stepDirection = Vector2Int.left; break;
-                case 1: stepDirection = Vector2Int.right; break;
-                case 2: stepDirection = Vector2Int.down; break;
-                case 3: stepDirection = Vector2Int.up; break;
+                Vector2Int stepDirection;
+
+                if (Random.value < unvisitedBias)
+                {
+                    stepDirection = GetBiasedDirection(currentCell, grid);
+                }
+                else
+                {
+                    int StepDirectionID = Random.Range(0, 4);
+
+                    stepDirection = StepDirectionID switch
+                    {
+                        0 => Vector2Int.left,
+                        1 => Vector2Int.right,
+                        2 => Vector2Int.down,
+                        _ => Vector2Int.up
+                    };
+                }
+
+                nextPos = currentCell.position + stepDirection;
+
+                safety++;
+
+                if (safety > 6)
+                {
+                    nextPos = GetRandomFloor(grid);
+                    break;
+                }
+
             }
-            
-            Vector2Int nextPos = currentCell.position + stepDirection;
+            while (!GridUtils.IsInsideGrid(grid, nextPos) ||
+                   grid[nextPos.x, nextPos.y].wallType == WallType.Indestructible);
 
-            if (!GridUtils.IsInsideGrid(grid, nextPos))
-                continue;
+            nextCell = grid[nextPos.x, nextPos.y];
 
-            Cell nextCell = grid[nextPos.x, nextPos.y];
-
-            //check if step is in bounds and if its not indestructable
-            if (nextCell.wallType == WallType.Indestructible)
-            {
-                continue;
-            }
-
-            //if so, add to the step counter
             currentStep++;
-            
-            //save the step into the grid
+
             currentCell = nextCell;
             currentCell.tileType = TileType.Floor;
             grid[currentCell.position.x, currentCell.position.y] = currentCell;
         }
-
-        //change the cells in the path, any cell that isnt in the path becomes a diggable wall (only if it isnt indestructable), any cell that is a path becomes a floor
+        
         foreach (Cell cell in grid)
         {
             if (cell.tileType != TileType.Floor && cell.wallType != WallType.Indestructible)
             {
                 currentCell = cell;
-                
+
                 currentCell.tileType = TileType.Wall;
                 currentCell.wallType = WallType.Diggable;
                 currentCell.contentType = ContentType.None;
-                
+
                 grid[cell.position.x, cell.position.y] = currentCell;
             }
         }
 
         return grid;
+    }
+    
+    private Vector2Int GetBiasedDirection(Cell currentCell, Cell[,] grid)
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            Vector2Int.left,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.up
+        };
+
+        Vector2Int best = directions[Random.Range(0, directions.Length)];
+
+        int bestScore = -1;
+
+        foreach (var dir in directions)
+        {
+            Vector2Int pos = currentCell.position + dir;
+
+            if (!GridUtils.IsInsideGrid(grid, pos))
+                continue;
+
+            Cell c = grid[pos.x, pos.y];
+            
+            int score = (c.tileType == TileType.Floor) ? 0 : 1;
+
+            if (score > bestScore)
+            {
+                bestScore = score;
+                best = dir;
+            }
+        }
+
+        return best;
+    }
+
+    private Vector2Int GetRandomFloor(Cell[,] grid)
+    {
+        int w = grid.GetLength(0);
+        int h = grid.GetLength(1);
+
+        for (int i = 0; i < 20; i++)
+        {
+            int x = Random.Range(0, w);
+            int y = Random.Range(0, h);
+
+            if (grid[x, y].tileType == TileType.Floor)
+                return new Vector2Int(x, y);
+        }
+
+        return new Vector2Int(0, 0);
     }
 }
