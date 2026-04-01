@@ -42,9 +42,18 @@ public class StartAndExitPlacement : MonoBehaviour
         startCell.contentType = ContentType.Start;
         grid[startPos.x, startPos.y] = startCell;
 
-        Vector2Int exitPos = b.tiles[Random.Range(0, b.tiles.Count)];
+        Vector2Int exitPos;
+        Cell exitCell;
 
-        Cell exitCell = grid[exitPos.x, exitPos.y];
+        while (true)
+        {
+            exitPos = b.tiles[Random.Range(0, b.tiles.Count)];
+            exitCell = grid[exitPos.x, exitPos.y];
+
+            if (exitCell.tileType == TileType.Floor)
+                break;
+        }
+
         exitCell.contentType = ContentType.Exit;
         grid[exitPos.x, exitPos.y] = exitCell;
 

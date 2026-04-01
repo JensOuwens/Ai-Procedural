@@ -79,6 +79,7 @@ public class ContentPlacement : MonoBehaviour
         {
             if (cell.tileType != TileType.Floor) continue;
             if (cell.contentType == ContentType.Start) continue;
+            if (cell.contentType == ContentType.Exit) continue;
 
             Cell currentCell = cell;
 

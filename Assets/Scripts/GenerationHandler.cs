@@ -15,6 +15,7 @@ public class GenerationHandler : MonoBehaviour
     [SerializeField] private RoomPlacement roomPlacement;
     [SerializeField] private StartAndExitPlacement startAndExitPlacement;
     [SerializeField] private ContentPlacement contentPlacement;
+    [SerializeField] private DisplayGridData displayGridData;
 
     private void Start()
     {
@@ -32,7 +33,8 @@ public class GenerationHandler : MonoBehaviour
         
         roomList = contentPlacement.DetermineRooms(roomList);
         grid = contentPlacement.populateGrid(grid,  roomList);
-        
+
+        displayGridData.RenderGrid(grid, roomList);
     }
 
     public void RandomizeSeed()

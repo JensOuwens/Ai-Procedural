@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Display : MonoBehaviour
+public class DisplayGridData : MonoBehaviour
 {
     [SerializeField] private GameObject cubePrefab;
+    
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject lootPrefab;
+    [SerializeField] private GameObject startPrefab;
+    [SerializeField] private GameObject exitPrefab;
 
     public void RenderGrid(Cell[,] grid, List<Room> roomList)
     {
@@ -54,7 +59,8 @@ public class Display : MonoBehaviour
                 RoomType.Start => Color.green,
                 RoomType.Boss => Color.red,
                 RoomType.Hidden => new Color(0.5f, 0f, 0.5f),
-                RoomType.Treasure => new Color(1f, 0.84f, 0f)
+                RoomType.Treasure => new Color(1f, 0.84f, 0f),
+                _ => Color.blue
             };
 
             foreach (Vector2Int pos in room.tiles)
@@ -78,29 +84,32 @@ public class Display : MonoBehaviour
             {
                 Cell cell = grid[x, y];
 
-                GameObject cube = spawned[x, y];
-                if (cube == null) continue;
+                Vector3 spawnPos = new Vector3(x, 1, y);
 
-                Renderer r = cube.GetComponent<Renderer>();
-                if (r == null) continue;
+                GameObject prefabToSpawn = null;
 
                 switch (cell.contentType)
                 {
                     case ContentType.Enemy:
-                        r.material.color = Color.red;
+                        prefabToSpawn = enemyPrefab;
                         break;
 
                     case ContentType.Loot:
-                        r.material.color = Color.cyan;
+                        prefabToSpawn = lootPrefab;
                         break;
 
                     case ContentType.Start:
-                        r.material.color = Color.blue;
+                        prefabToSpawn = startPrefab;
                         break;
 
                     case ContentType.Exit:
-                        r.material.color = Color.magenta;
+                        prefabToSpawn = exitPrefab;
                         break;
+                }
+
+                if (prefabToSpawn != null)
+                {
+                    Instantiate(prefabToSpawn, spawnPos, Quaternion.Euler(90f, 0f, 0f), transform);
                 }
             }
         }

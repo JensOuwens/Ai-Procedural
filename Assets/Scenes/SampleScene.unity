@@ -148,13 +148,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db89c193f42aaf488d9d51f7a113400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenerationHandler
-  seed: 758
+  seed: 745684
   gridHandler: {fileID: 2051618582}
   randomWalk: {fileID: 518679528}
   roomPlacement: {fileID: 1662837667}
   startAndExitPlacement: {fileID: 1176484651}
   contentPlacement: {fileID: 1384891877}
-  cubePrefab: {fileID: 2954374253766728374, guid: d5ddc9ed3df3b3b40b5b309acf680986, type: 3}
+  displayGridData: {fileID: 2056450130}
 --- !u!4 &38052661
 Transform:
   m_ObjectHideFlags: 0
@@ -660,6 +660,7 @@ Transform:
   - {fileID: 1662837666}
   - {fileID: 1176484650}
   - {fileID: 1384891876}
+  - {fileID: 2056450129}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1662837665
@@ -758,6 +759,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridHandler
   minGridSize: {x: 20, y: 20}
   maxGridSize: {x: 35, y: 35}
+--- !u!1 &2056450128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2056450129}
+  - component: {fileID: 2056450130}
+  m_Layer: 0
+  m_Name: DisplayGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2056450129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056450128}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1398952766}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2056450130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056450128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1625cb91caf3745afe3a355e9128c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisplayGridData
+  cubePrefab: {fileID: 2954374253766728374, guid: d5ddc9ed3df3b3b40b5b309acf680986, type: 3}
+  enemyPrefab: {fileID: 7153748172537857358, guid: ed9cb4f26cc10794f852b7869fa2e6e5, type: 3}
+  lootPrefab: {fileID: 8822801922599475754, guid: a1ed1d15cf6527c458af0dd2a600f87e, type: 3}
+  startPrefab: {fileID: 5551622712377405662, guid: 71bf320529772954b9a17be3a0825f68, type: 3}
+  exitPrefab: {fileID: 3200843929687836112, guid: e31cfa5d07d7a7e45933f3b91257342a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
