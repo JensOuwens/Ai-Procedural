@@ -2743,13 +2743,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 10, y: 20, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4743,25 +4743,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DungeonUI
   config: {fileID: 11400000, guid: 7d081a2423d87d54ba04c41c49cd4d5a, type: 2}
   generator: {fileID: 38052660}
-  seedInput: {fileID: 0}
-  minGridX: {fileID: 0}
-  minGridY: {fileID: 0}
-  maxGridX: {fileID: 0}
-  maxGridY: {fileID: 0}
-  stepsInput: {fileID: 0}
-  biasSlider: {fileID: 0}
-  minRoomsInput: {fileID: 0}
-  maxRoomsInput: {fileID: 0}
-  minRoomX: {fileID: 0}
-  minRoomY: {fileID: 0}
-  maxRoomX: {fileID: 0}
-  maxRoomY: {fileID: 0}
-  spawnChanceInput: {fileID: 0}
-  attemptsInput: {fileID: 0}
-  treasureRoomInput: {fileID: 0}
-  hiddenRoomInput: {fileID: 0}
-  enemyCorridorInput: {fileID: 0}
-  treasureCorridorInput: {fileID: 0}
+  seedInput: {fileID: 337571550}
+  minGridX: {fileID: 1826995746}
+  minGridY: {fileID: 855363778}
+  maxGridX: {fileID: 23610879}
+  maxGridY: {fileID: 712157415}
+  stepsInput: {fileID: 1261525191}
+  biasSlider: {fileID: 494485723}
+  minRoomsInput: {fileID: 1600048329}
+  maxRoomsInput: {fileID: 2000698801}
+  minRoomX: {fileID: 1532304066}
+  minRoomY: {fileID: 239330453}
+  maxRoomX: {fileID: 1707834862}
+  maxRoomY: {fileID: 262561318}
+  spawnChanceInput: {fileID: 143642837}
+  attemptsInput: {fileID: 1926162317}
+  treasureRoomInput: {fileID: 1273944197}
+  hiddenRoomInput: {fileID: 1266427225}
+  enemyCorridorInput: {fileID: 1556483752}
+  treasureCorridorInput: {fileID: 1331535063}
 --- !u!1 &563459919
 GameObject:
   m_ObjectHideFlags: 0
@@ -11486,7 +11486,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1732415399}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559308783}
+        m_TargetAssemblyTypeName: DungeonUI, Assembly-CSharp
+        m_MethodName: OnGeneratePressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1732415399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13280,7 +13292,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1930238311}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559308783}
+        m_TargetAssemblyTypeName: DungeonUI, Assembly-CSharp
+        m_MethodName: OnRandomSeedPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1930238311
 MonoBehaviour:
   m_ObjectHideFlags: 0
