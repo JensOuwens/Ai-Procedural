@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fa226c9668ab0458c29091390b820c, type: 3}
+  m_Name: DunngeonConfig
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonConfig
+  seed: 0
+  minGridSize: {x: 15, y: 15}
+  maxGridSize: {x: 25, y: 25}
+  numberOfSteps: 350
+  unvisitedBias: 0.07
+  minRooms: 2
+  maxRooms: 5
+  minRoomSize: {x: 3, y: 3}
+  maxRoomSize: {x: 7, y: 7}
+  roomSpawnChance: 20
+  roomMaxAttempts: 1000
+  treasureRoomChance: 20
+  hiddenRoomChance: 10
+  enemyCorridorSpawnChance: 5
+  treasureCorridorSpawnChance: 2

@@ -3,18 +3,22 @@ using UnityEngine;
 
 public class RoomPlacement : MonoBehaviour
 {
-    [SerializeField] private int minRooms;
-    [SerializeField] private int maxRooms;
-    [SerializeField] private Vector2Int minRoomSize;
-    [SerializeField] private Vector2Int maxRoomSize;
-    [SerializeField] private int spawnChance;
-    [SerializeField] private int maxAttempts;
+    private DungeonConfig config;
+
+    public void SetConfig(DungeonConfig cfg) => config = cfg;
 
     private List<Room> rooms = new List<Room>();
     private HashSet<Vector2Int> occupied = new HashSet<Vector2Int>();
 
     public List<Room> generateRooms(Cell[,] grid)
     {
+        int minRooms = config.minRooms;
+        int maxRooms = config.maxRooms;
+        Vector2Int minRoomSize = config.minRoomSize;
+        Vector2Int maxRoomSize = config.maxRoomSize;
+        int spawnChance = config.roomSpawnChance;
+        int maxAttempts = config.roomMaxAttempts;
+
         rooms.Clear();
         occupied.Clear();
 
@@ -41,7 +45,6 @@ public class RoomPlacement : MonoBehaviour
                 int halfHeight = size.y / 2;
 
                 List<Vector2Int> roomCells = new List<Vector2Int>();
-
                 bool invalid = false;
 
                 for (int x = 0; x < size.x; x++)
@@ -53,19 +56,9 @@ public class RoomPlacement : MonoBehaviour
 
                         Vector2Int pos = new Vector2Int(gridX, gridY);
 
-                        if (!GridUtils.IsInsideGrid(grid, pos))
-                        {
-                            invalid = true;
-                            break;
-                        }
-
-                        if (grid[gridX, gridY].wallType == WallType.Indestructible)
-                        {
-                            invalid = true;
-                            break;
-                        }
-
-                        if (occupied.Contains(pos))
+                        if (!GridUtils.IsInsideGrid(grid, pos) ||
+                            grid[gridX, gridY].wallType == WallType.Indestructible ||
+                            occupied.Contains(pos))
                         {
                             invalid = true;
                             break;

@@ -1,19 +1,20 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridHandler : MonoBehaviour
 {
-    [SerializeField] Vector2Int minGridSize;
-    [SerializeField] Vector2Int maxGridSize;
+    private DungeonConfig config;
+
+    public void SetConfig(DungeonConfig cfg) => config = cfg;
 
     public Cell[,] CreateGrid()
     {
-        //make grid
-        Vector2Int randomGridSize = new Vector2Int(Random.Range(minGridSize.x, maxGridSize.x + 1),
-            Random.Range(minGridSize.y, maxGridSize.y + 1));
-        
-        Cell[,] grid = new  Cell[randomGridSize.x, randomGridSize.y];
-        
+        Vector2Int randomGridSize = new Vector2Int(
+            Random.Range(config.minGridSize.x, config.maxGridSize.x + 1),
+            Random.Range(config.minGridSize.y, config.maxGridSize.y + 1)
+        );
+
+        Cell[,] grid = new Cell[randomGridSize.x, randomGridSize.y];
+
         for (int x = 0; x < randomGridSize.x; x++)
         {
             for (int y = 0; y < randomGridSize.y; y++)
@@ -21,11 +22,10 @@ public class GridHandler : MonoBehaviour
                 grid[x, y] = new Cell(x, y);
             }
         }
-        
-        //make edges indestructable
+
         int gridWidth = grid.GetLength(0) - 1;
         int gridHeight = grid.GetLength(1) - 1;
-        
+
         for (int y = 0; y <= gridHeight; y++)
         {
             grid[0, y].tileType = TileType.Wall;
@@ -36,7 +36,7 @@ public class GridHandler : MonoBehaviour
             grid[gridWidth, y].wallType = WallType.Indestructible;
             grid[gridWidth, y].contentType = ContentType.None;
         }
-        
+
         for (int x = 0; x <= gridWidth; x++)
         {
             grid[x, 0].tileType = TileType.Wall;
@@ -47,7 +47,7 @@ public class GridHandler : MonoBehaviour
             grid[x, gridHeight].wallType = WallType.Indestructible;
             grid[x, gridHeight].contentType = ContentType.None;
         }
-        
+
         return grid;
     }
 }

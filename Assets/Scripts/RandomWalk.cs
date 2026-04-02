@@ -2,14 +2,18 @@ using UnityEngine;
 
 public class RandomWalk : MonoBehaviour
 {
-    [SerializeField] private int numberOfSteps;
-    [SerializeField, Range(0f, 1f)] private float unvisitedBias = 0.2f;
+    private DungeonConfig config;
+
+    public void SetConfig(DungeonConfig cfg) => config = cfg;
 
     int attempts = 0;
     private int maxAttempts;
 
     public Cell[,] RandomlyWalk(Cell[,] grid)
     {
+        int numberOfSteps = config.numberOfSteps;
+        float unvisitedBias = config.unvisitedBias;
+
         int currentStep = 0;
         attempts = 0;
         maxAttempts = numberOfSteps * 10;
@@ -88,7 +92,7 @@ public class RandomWalk : MonoBehaviour
             currentCell.tileType = TileType.Floor;
             grid[currentCell.position.x, currentCell.position.y] = currentCell;
         }
-        
+
         foreach (Cell cell in grid)
         {
             if (cell.tileType != TileType.Floor && cell.wallType != WallType.Indestructible)
@@ -105,7 +109,7 @@ public class RandomWalk : MonoBehaviour
 
         return grid;
     }
-    
+
     private Vector2Int GetBiasedDirection(Cell currentCell, Cell[,] grid)
     {
         Vector2Int[] directions = new Vector2Int[]
@@ -117,7 +121,6 @@ public class RandomWalk : MonoBehaviour
         };
 
         Vector2Int best = directions[Random.Range(0, directions.Length)];
-
         int bestScore = -1;
 
         foreach (var dir in directions)
@@ -128,7 +131,6 @@ public class RandomWalk : MonoBehaviour
                 continue;
 
             Cell c = grid[pos.x, pos.y];
-            
             int score = (c.tileType == TileType.Floor) ? 0 : 1;
 
             if (score > bestScore)

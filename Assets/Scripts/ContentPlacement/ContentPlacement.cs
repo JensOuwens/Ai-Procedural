@@ -3,21 +3,17 @@ using UnityEngine;
 
 public class ContentPlacement : MonoBehaviour
 {
-    [SerializeField] private int minEnemiesPerRoom;
-    [SerializeField] private int maxEnemiesPerRoom;
-    [SerializeField] private int minTreasurePerRoom;
-    [SerializeField] private int maxTreasurePerRoom;
+    private DungeonConfig config;
 
-    [SerializeField] private int treasureRoomChance;
-    [SerializeField] private int hiddenRoomChance;
+    public void SetConfig(DungeonConfig cfg) => config = cfg;
 
-    [SerializeField] private int EnemyCorridorSpawnChance;
-    [SerializeField] private int TreasureCorridorSpawnChance;
-    
     private Dictionary<Vector2Int, int> cellToRoomIndex = new Dictionary<Vector2Int, int>();
 
     public List<Room> DetermineRooms(List<Room> roomList)
     {
+        int treasureRoomChance = config.treasureRoomChance;
+        int hiddenRoomChance = config.hiddenRoomChance;
+
         for (int i = 0; i < roomList.Count; i++)
         {
             Room currentRoom = roomList[i];
@@ -66,7 +62,11 @@ public class ContentPlacement : MonoBehaviour
 
     public Cell[,] populateGrid(Cell[,] grid, List<Room> roomList)
     {
+        int EnemyCorridorSpawnChance = config.enemyCorridorSpawnChance;
+        int TreasureCorridorSpawnChance = config.treasureCorridorSpawnChance;
+
         cellToRoomIndex.Clear();
+
         for (int i = 0; i < roomList.Count; i++)
         {
             foreach (Vector2Int pos in roomList[i].tiles)
@@ -90,17 +90,11 @@ public class ContentPlacement : MonoBehaviour
                 int roll = Random.Range(0, 100);
 
                 if (roll < TreasureCorridorSpawnChance)
-                {
                     currentCell.contentType = ContentType.Loot;
-                }
                 else if (roll < TreasureCorridorSpawnChance + EnemyCorridorSpawnChance)
-                {
                     currentCell.contentType = ContentType.Enemy;
-                }
                 else
-                {
                     currentCell.contentType = ContentType.None;
-                }
             }
             else
             {
@@ -111,26 +105,11 @@ public class ContentPlacement : MonoBehaviour
 
                 switch (room.roomType)
                 {
-                    case RoomType.Normal:
-                        enemyChance = 40;
-                        treasureChance = 10;
-                        break;
-                    case RoomType.Hidden:
-                        enemyChance = 10;
-                        treasureChance = 40;
-                        break;
-                    case RoomType.Treasure:
-                        enemyChance = 20;
-                        treasureChance = 50;
-                        break;
-                    case RoomType.Boss:
-                        enemyChance = 60;
-                        treasureChance = 20;
-                        break;
-                    case RoomType.Start:
-                        enemyChance = 0;
-                        treasureChance = 0;
-                        break;
+                    case RoomType.Normal: enemyChance = 40; treasureChance = 10; break;
+                    case RoomType.Hidden: enemyChance = 10; treasureChance = 40; break;
+                    case RoomType.Treasure: enemyChance = 20; treasureChance = 50; break;
+                    case RoomType.Boss: enemyChance = 60; treasureChance = 20; break;
+                    case RoomType.Start: enemyChance = 0; treasureChance = 0; break;
                 }
 
                 int roll = Random.Range(0, 100);
@@ -140,7 +119,6 @@ public class ContentPlacement : MonoBehaviour
                     if (room.currentTreasureAmount < room.treasureAmount)
                     {
                         currentCell.contentType = ContentType.Loot;
-
                         room.currentTreasureAmount++;
                         roomList[roomIndex] = room;
                     }
@@ -150,7 +128,6 @@ public class ContentPlacement : MonoBehaviour
                     if (room.currentEnemyAmount < room.EnemyAmount)
                     {
                         currentCell.contentType = ContentType.Enemy;
-
                         room.currentEnemyAmount++;
                         roomList[roomIndex] = room;
                     }
@@ -163,7 +140,7 @@ public class ContentPlacement : MonoBehaviour
 
             grid[currentCell.position.x, currentCell.position.y] = currentCell;
         }
-        
+
         for (int i = 0; i < roomList.Count; i++)
         {
             Room room = roomList[i];

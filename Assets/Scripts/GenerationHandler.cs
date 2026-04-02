@@ -7,7 +7,7 @@ public class GenerationHandler : MonoBehaviour
     private Cell[,] grid;
     private List<Room> roomList = new List<Room>();
 
-    [SerializeField] private int seed;
+    [SerializeField] private DungeonConfig config;
 
     [Header("references")]
     [SerializeField] private GridHandler gridHandler;
@@ -19,26 +19,38 @@ public class GenerationHandler : MonoBehaviour
 
     private void Start()
     {
-        Random.InitState(seed);
+        ApplyConfig();
         Generate();
+    }
+
+    public void ApplyConfig()
+    {
+        Random.InitState(config.seed);
+
+        gridHandler.SetConfig(config);
+        randomWalk.SetConfig(config);
+        roomPlacement.SetConfig(config);
+        contentPlacement.SetConfig(config);
     }
 
     public void Generate()
     {
+        ApplyConfig();
+
         grid = gridHandler.CreateGrid();
         grid = randomWalk.RandomlyWalk(grid);
 
         roomList = roomPlacement.generateRooms(grid);
         roomList = startAndExitPlacement.Place(grid, roomList);
-        
+
         roomList = contentPlacement.DetermineRooms(roomList);
-        grid = contentPlacement.populateGrid(grid,  roomList);
+        grid = contentPlacement.populateGrid(grid, roomList);
 
         displayGridData.RenderGrid(grid, roomList);
     }
 
     public void RandomizeSeed()
     {
-        seed = Random.Range(0, 999999);
+        config.seed = Random.Range(0, 999999);
     }
 }
